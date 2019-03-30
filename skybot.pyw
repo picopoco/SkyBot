@@ -34,8 +34,10 @@ from PyQt5 import QtCore, QtGui, uic
 from PyQt5 import QAxContainer
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-#from PyQt5.QtWidgets import (QApplication, QLabel, QLineEdit, QMainWindow, QDialog, QMessageBox, QProgressBar)
 from PyQt5.QtWidgets import *
+#from PyQt5.QtWidgets import (QApplication, QLabel, QLineEdit, QMainWindow, QDialog, QMessageBox, QProgressBar)
+from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QLabel
+from PyQt5.QtGui import QPainter, QColor, QPen
 from PyQt5.QAxContainer import *
 from PyQt5.QtTest import QTest
 
@@ -426,6 +428,14 @@ orangered = QColor(255, 69, 0)
 magenta = QColor(255, 0, 255)
 lavender = QColor(230, 230, 250)
 mistyrose = QColor(255, 228, 225)
+
+# 콜 전고, 전저
+gold = QColor(0xFF, 0xD7, 0x00)
+goldenrod = QColor(0xDA, 0xA5, 0x20)
+
+# 풋 전고, 전저
+skyblue = QColor(0x87, 0xCE, 0xEB)
+steelblue = QColor(0x46, 0x82, 0xB4)
 
 futpen=pg.mkPen(blueviolet, width=2, style=QtCore.Qt.SolidLine)
 rpen=pg.mkPen('r', width=2, style=QtCore.Qt.SolidLine)
