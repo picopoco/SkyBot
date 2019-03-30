@@ -473,9 +473,14 @@ fut_jh_line = None
 kp200_curve = None
 call_curve = []
 put_curve = []
+
 cm_call_volume_curve = None
 cm_put_volume_curve = None
 cm_volume_cha_curve = None
+
+cm_call_oi_curve = None
+cm_put_oi_curve = None
+cm_oi_cha_curve = None
 
 volume_cha_sign = []
 
@@ -2212,6 +2217,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
         global time_line_fut, fut_curve, kp200_curve
         global fut_jl_line, fut_jh_line, fut_pivot_line, volume_base_line
         global cm_call_volume_curve, cm_put_volume_curve, cm_volume_cha_curve
+        global cm_call_oi_curve, cm_put_oi_curve, cm_oi_cha_curve
         #global cm_volume_plus_curve, cm_volume_minus_curve
 
         time_line_fut = self.Plot_Fut.addLine(x=0, y=None, pen=tpen)
@@ -2229,6 +2235,10 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
         cm_volume_cha_curve = self.Plot_Fut.plot(pen=gpen)
         #cm_volume_plus_curve = self.Plot_Fut.plot(pen=magenta_pen)
         #cm_volume_minus_curve = self.Plot_Fut.plot(pen=aqua_pen)
+
+        cm_call_oi_curve = self.Plot_Fut.plot(pen=rpen)
+        cm_put_oi_curve = self.Plot_Fut.plot(pen=bpen)
+        cm_oi_cha_curve = self.Plot_Fut.plot(pen=gpen)
 
         self.Plot_Opt.enableAutoRange('y', True)
         self.Plot_Opt.plotItem.showGrid(True, True, 0.5)
@@ -2440,9 +2450,104 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
     def selectionChanged(self):
 
         global comboindex
+        global fut_curve, kp200_curve
+        global cm_call_volume_curve, cm_put_volume_curve, cm_volume_cha_curve
+        global cm_call_oi_curve, cm_put_oi_curve, cm_oi_cha_curve
 
         txt = self.comboBox1.currentText()
         comboindex = self.comboBox1.currentIndex()
+
+        if comboindex == 0:
+
+            cm_call_volume_curve.clear()
+            cm_put_volume_curve.clear()
+            cm_volume_cha_curve.clear()
+
+            cm_call_oi_curve.clear()
+            cm_put_oi_curve.clear()
+            cm_oi_cha_curve.clear()
+
+            for i in range(nCount_cm_option_pairs):
+                temp = format(df_cm_call.iloc[i]['미결'], ',')
+
+                item = QTableWidgetItem(temp)
+                item.setTextAlignment(Qt.AlignCenter)
+                self.tableWidget_call.setItem(i, Option_column.OI.value, item)
+
+                temp = format(df_cm_put.iloc[i]['미결'], ',')
+
+                item = QTableWidgetItem(temp)
+                item.setTextAlignment(Qt.AlignCenter)
+                self.tableWidget_put.setItem(i, Option_column.OI.value, item)
+
+            call_temp = format(df_cm_call['미결'].sum(), ',')
+            put_temp = format(df_cm_put['미결'].sum(), ',')
+
+        elif comboindex == 1:
+
+            kp200_curve.clear()
+            fut_curve.clear()
+
+            cm_call_oi_curve.clear()
+            cm_put_oi_curve.clear()
+            cm_oi_cha_curve.clear()
+
+            for i in range(nCount_cm_option_pairs):
+                temp = format(df_cm_call.iloc[i]['수정거래량'], ',')
+
+                item = QTableWidgetItem(temp)
+                item.setTextAlignment(Qt.AlignCenter)
+                self.tableWidget_call.setItem(i, Option_column.OI.value, item)
+
+                temp = format(df_cm_put.iloc[i]['수정거래량'], ',')
+
+                item = QTableWidgetItem(temp)
+                item.setTextAlignment(Qt.AlignCenter)
+                self.tableWidget_put.setItem(i, Option_column.OI.value, item)
+
+            call_temp = format(df_cm_call['수정거래량'].sum(), ',')
+            put_temp = format(df_cm_put['수정거래량'].sum(), ',')
+
+        else:
+
+            kp200_curve.clear()
+            fut_curve.clear()
+
+            cm_call_volume_curve.clear()
+            cm_put_volume_curve.clear()
+            cm_volume_cha_curve.clear()
+
+            for i in range(nCount_cm_option_pairs):
+                temp = format(df_cm_call.iloc[i]['미결'], ',')
+
+                item = QTableWidgetItem(temp)
+                item.setTextAlignment(Qt.AlignCenter)
+                self.tableWidget_call.setItem(i, Option_column.OI.value, item)
+
+                temp = format(df_cm_put.iloc[i]['미결'], ',')
+
+                item = QTableWidgetItem(temp)
+                item.setTextAlignment(Qt.AlignCenter)
+                self.tableWidget_put.setItem(i, Option_column.OI.value, item)
+
+            call_temp = format(df_cm_call['미결'].sum(), ',')
+            put_temp = format(df_cm_put['미결'].sum(), ',')
+
+        if call_temp != self.tableWidget_call.horizontalHeaderItem(Option_column.OI.value).text():
+            item = QTableWidgetItem(call_temp)
+            self.tableWidget_call.setHorizontalHeaderItem(Option_column.OI.value, item)
+            self.tableWidget_call.resizeColumnsToContents()
+            self.tableWidget_call.setColumnWidth(0, 15)
+        else:
+            pass
+
+        if put_temp != self.tableWidget_put.horizontalHeaderItem(Option_column.OI.value).text():
+            item = QTableWidgetItem(put_temp)
+            self.tableWidget_put.setHorizontalHeaderItem(Option_column.OI.value, item)
+            self.tableWidget_put.resizeColumnsToContents()
+            self.tableWidget_put.setColumnWidth(0, 15)
+        else:
+            pass
 
     def timeout(self):
         dt = datetime.datetime.now()
@@ -2470,6 +2575,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
         global fut_jl_line, fut_jh_line, fut_pivot_line, volume_base_line
         global fut_curve, kp200_curve
         global cm_call_volume_curve, cm_put_volume_curve, cm_volume_cha_curve
+        global cm_call_oi_curve, cm_put_oi_curve, cm_oi_cha_curve
 
         if self.checkBox_vplot.isChecked():
 
@@ -5273,8 +5379,6 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     item.setTextAlignment(Qt.AlignCenter)
                     self.tableWidget_call.setItem(i, Option_column.OID.value, item)
 
-                    df_plotdata_cm_call_volume.iloc[0][0] = 0
-
                     if df['ATM구분'][i] == '1':
 
                         atm_index = i
@@ -5351,6 +5455,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                         pass
 
                 cm_call_행사가 = df_cm_call['행사가'].values.tolist()
+                
+                df_plotdata_cm_call_volume.iloc[0][0] = 0
 
                 print(df_cm_call)
 
@@ -5545,9 +5651,6 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     item.setTextAlignment(Qt.AlignCenter)
                     self.tableWidget_put.setItem(i, Option_column.OID.value, item)
 
-                    df_plotdata_cm_put_volume.iloc[0][0] = 0
-                    df_plotdata_cm_volume_cha.iloc[0][0] = 0
-
                     if df1['ATM구분'][i] == '1':
 
                         # atm_str = 행사가
@@ -5625,6 +5728,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                         pass
 
                 cm_put_행사가 = df_cm_put['행사가'].values.tolist()
+                
+                df_plotdata_cm_put_volume.iloc[0][0] = 0
+                df_plotdata_cm_volume_cha.iloc[0][0] = 0
 
                 print(df_cm_put)
 
@@ -5703,6 +5809,10 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     #put_oi_percent_init_value = 풋미결퍼센트
                     call_oi_percent_init_value = 콜_미결합
                     put_oi_percent_init_value = 풋_미결합
+
+                    df_plotdata_cm_call_oi[0][0] = 0
+                    df_plotdata_cm_put_oi[0][0] = 0
+                    df_plotdata_cm_oi_cha.iloc[0][0] = 0
 
                     str = '[{0:02d}:{1:02d}:{2:02d}] Call OI 시작값 : {3}, Put OI 시작값 : {4}\r'.format(dt.hour,
                                             dt.minute, dt.second, format(call_oi_percent_init_value, ','),
