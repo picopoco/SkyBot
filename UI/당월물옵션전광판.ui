@@ -181,19 +181,6 @@
         <widget class="QComboBox" name="comboBox1"/>
        </item>
        <item>
-        <widget class="QCheckBox" name="checkBox_vplot">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>V-Plot</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QCheckBox" name="checkBox_quoteview">
          <property name="font">
           <font>

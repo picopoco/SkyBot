@@ -177,7 +177,7 @@ toggle_calltable = False
 toggle_puttable = False
 
 # 실시간 스위치
-VOLUME_PLOT = False
+#VOLUME_PLOT = False
 
 # 업종코드
 KOSPI = '001'
@@ -1983,6 +1983,29 @@ class Plot_Worker(QThread):
             call_curve_data = df_plotdata_cm_call.iloc[index].values.tolist()
             put_curve_data = df_plotdata_cm_put.iloc[index].values.tolist()
 
+            if comboindex == 0:
+
+                curve1_data = df_plotdata_kp200.iloc[0].values.tolist()
+                curve2_data = df_plotdata_fut.iloc[0].values.tolist()
+
+                return call_curve_data, put_curve_data, curve1_data, curve2_data
+
+            elif comboindex == 1:
+
+                curve1_data = df_plotdata_cm_call_volume.iloc[0].values.tolist()
+                curve2_data = df_plotdata_cm_put_volume.iloc[0].values.tolist()
+                curve3_data = df_plotdata_cm_volume_cha.iloc[0].values.tolist()
+
+                return call_curve_data, put_curve_data, curve1_data, curve2_data, curve3_data
+
+            else:
+
+                curve1_data = df_plotdata_cm_call_oi.iloc[0].values.tolist()
+                curve2_data = df_plotdata_cm_put_oi.iloc[0].values.tolist()
+                curve3_data = df_plotdata_cm_oi_cha.iloc[0].values.tolist()
+
+                return call_curve_data, put_curve_data, curve1_data, curve2_data, curve3_data
+            '''
             if VOLUME_PLOT:
 
                 curve1_data = df_plotdata_cm_call_volume.iloc[0].values.tolist()
@@ -1996,14 +2019,21 @@ class Plot_Worker(QThread):
                 curve2_data = df_plotdata_fut.iloc[0].values.tolist()
 
                 return call_curve_data, put_curve_data, curve1_data, curve2_data
-
+            '''
         except:
 
+            if comboindex == 0:
+
+                return None, None, None, None
+            else:
+                return None, None, None, None, None
+            '''
             if VOLUME_PLOT:
 
                 return None, None, None, None, None
             else:
                 return None, None, None, None
+            '''
 
 ########################################################################################################################
 
@@ -2421,7 +2451,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
         self.checkBox_quoteview.stateChanged.connect(self.quoteview_state_changed)
 
         # 지수실시간 요청 시그날/슬롯
-        self.checkBox_vplot.stateChanged.connect(self.vplot_state_changed)
+        #self.checkBox_vplot.stateChanged.connect(self.vplot_state_changed)
 
         self.IJ = IJ_(parent=self)
         self.S3 = S3_(parent=self)
@@ -2567,15 +2597,14 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
         else:
             stylesheet = "background-color: {0}; color: {1}".format(color1, color2)
             widget.setStyleSheet(stylesheet)
-
+    '''
     @pyqtSlot(int)
     def vplot_state_changed(self):
 
-        global VOLUME_PLOT
+        #global VOLUME_PLOT
         global fut_jl_line, fut_jh_line, fut_pivot_line, volume_base_line
         global fut_curve, kp200_curve
         global cm_call_volume_curve, cm_put_volume_curve, cm_volume_cha_curve
-        global cm_call_oi_curve, cm_put_oi_curve, cm_oi_cha_curve
 
         if self.checkBox_vplot.isChecked():
 
@@ -2639,7 +2668,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             self.tableWidget_put.setColumnWidth(0, 15)
         else:
             pass
-
+    '''
     @pyqtSlot(int)
     def quoteview_state_changed(self):
 
@@ -3606,15 +3635,33 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
             if x_idx > 10 and opt_x_idx > 10:
 
+                if comboindex == 0:
+
+                    time_line_fut.setValue(x_idx + 1)
+                else:
+                    time_line_fut.setValue(opt_x_idx + 1)
+                '''
                 if VOLUME_PLOT:
                     time_line_fut.setValue(opt_x_idx + 1)
                 else:
                     time_line_fut.setValue(x_idx + 1)
-
+                '''
                 time_line.setValue(opt_x_idx + 1)
             else:
                 pass
 
+            if comboindex == 0:
+
+                fut_jl_line.setValue(fut_realdata['전저'])
+                fut_jh_line.setValue(fut_realdata['전고'])
+                volume_base_line.setValue(fut_realdata['피봇'])
+                fut_pivot_line.setValue(fut_realdata['피봇'])
+            else:
+                fut_jl_line.setValue(0)
+                fut_jh_line.setValue(0)
+                fut_pivot_line.setValue(0)
+                volume_base_line.setValue(0)
+            '''
             if not VOLUME_PLOT:
 
                 fut_jl_line.setValue(fut_realdata['전저'])
@@ -3626,6 +3673,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 fut_jh_line.setValue(0)
                 fut_pivot_line.setValue(0)
                 volume_base_line.setValue(0)
+            '''
 
             # clear all view tablewidget curve
             dummy = [np.nan] * (opt_x_idx + 1)
@@ -3659,19 +3707,48 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 curve1_data = infos[2]
                 curve2_data = infos[3]
 
+                if comboindex == 0:
+                    pass
+                else:
+                    curve3_data = infos[4]
+                '''
                 if VOLUME_PLOT:
 
                     curve3_data = infos[4]
                 else:
                     pass
-
-            if VOLUME_PLOT:
                 '''
+
+            if comboindex == 0:
+
+                kp200_curve.setData(curve1_data)
+                fut_curve.setData(curve2_data)
+
+            elif comboindex == 1:
+
+                c3 = curve3_data[:opt_x_idx + 2]
+
+                if call_volume_total > put_volume_total:
+                    cm_volume_cha_curve.setData(c3, fillLevel=0.0, brush='r')
+                else:
+                    cm_volume_cha_curve.setData(c3, fillLevel=0.0, brush='b')
+
+                cm_call_volume_curve.setData(curve1_data)
+                cm_put_volume_curve.setData(curve2_data)
+
+            else:
+                cm_oi_cha_curve.setData(curve3_data)
+                cm_call_oi_curve.setData(curve1_data)
+                cm_put_oi_curve.setData(curve2_data)
+
+            '''
+            if VOLUME_PLOT:
+                
                 if not np.isnan(curve1_data).all():
                     cm_call_volume_curve.setData(curve1_data)
                 else:
                     pass
-                '''
+                
                 #c1 = curve1_data[:opt_x_idx + 2]
                 #c2 = curve2_data[:opt_x_idx + 2]
                 c3 = curve3_data[:opt_x_idx + 2]
@@ -3684,18 +3761,19 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 cm_call_volume_curve.setData(curve1_data)
                 cm_put_volume_curve.setData(curve2_data)
             else:
-                '''
+                
                 if not np.isnan(curve1_data).all():
                     kp200_curve.setData(curve1_data)
                 else:
                     pass
-                '''
+                
                 kp200_curve.setData(curve1_data)
                 fut_curve.setData(curve2_data)
 
                 # 선물 Y축 최소, 최대값 구하기
                 #fut_axY = self.Plot_Fut.getAxis('left')
                 #print('선물 y axis range: {}'.format(fut_axY.range))
+            '''
 
             str = '[{0:02d}:{1:02d}:{2:02d}] plot update 처리시간 ----------> {3:0.2f} ms...'.format(delta_hour, delta_minute, delta_sec, (timeit.default_timer() - start_time) * 1000)
             print(str)
@@ -5363,10 +5441,17 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                         temp = format(미결, ',')
                     else:
+                        if comboindex == 1:
+
+                            temp = format(수정거래량, ',')
+                        else:
+                            temp = format(미결, ',')
+                        '''    
                         if VOLUME_PLOT:
                             temp = format(수정거래량, ',')
                         else:
                             temp = format(미결, ',')
+                        '''
 
                     item = QTableWidgetItem(temp)
                     item.setTextAlignment(Qt.AlignCenter)
@@ -5443,10 +5528,18 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     else:
                         pass
                 else:
+                    if comboindex == 1:
+
+                        temp = format(df_cm_call['수정거래량'].sum(), ',')
+                    else:
+                        temp = format(df_cm_call['미결'].sum(), ',')
+
+                    '''    
                     if VOLUME_PLOT:
                         temp = format(df_cm_call['수정거래량'].sum(), ',')
                     else:
                         temp = format(df_cm_call['미결'].sum(), ',')
+                    '''
 
                     if temp != self.tableWidget_call.horizontalHeaderItem(Option_column.OI.value).text():
                         item = QTableWidgetItem(temp)
@@ -5455,8 +5548,6 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                         pass
 
                 cm_call_행사가 = df_cm_call['행사가'].values.tolist()
-                
-                df_plotdata_cm_call_volume.iloc[0][0] = 0
 
                 print(df_cm_call)
 
@@ -5635,10 +5726,17 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                         temp = format(미결, ',')
                     else:
+                        if comboindex == 1:
+
+                            temp = format(수정거래량, ',')
+                        else:
+                            temp = format(미결, ',')
+                        '''
                         if VOLUME_PLOT:
                             temp = format(수정거래량, ',')
                         else:
                             temp = format(미결, ',')
+                        '''
 
                     item = QTableWidgetItem(temp)
                     item.setTextAlignment(Qt.AlignCenter)
@@ -5716,10 +5814,18 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     else:
                         pass
                 else:
+                    if comboindex == 1:
+
+                        temp = format(df_cm_put['수정거래량'].sum(), ',')
+                    else:
+                        temp = format(df_cm_put['미결'].sum(), ',')
+
+                    '''
                     if VOLUME_PLOT:
                         temp = format(df_cm_put['수정거래량'].sum(), ',')
                     else:
                         temp = format(df_cm_put['미결'].sum(), ',')
+                    '''
 
                     if temp != self.tableWidget_put.horizontalHeaderItem(Option_column.OI.value).text():
                         item = QTableWidgetItem(temp)
@@ -5729,9 +5835,6 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                 cm_put_행사가 = df_cm_put['행사가'].values.tolist()
                 
-                df_plotdata_cm_put_volume.iloc[0][0] = 0
-                df_plotdata_cm_volume_cha.iloc[0][0] = 0
-
                 print(df_cm_put)
 
                 self.tableWidget_put.resizeColumnsToContents()
@@ -5795,6 +5898,10 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 self.tableWidget_fut.setItem(2, Futures_column.거래량.value, item)
                 self.tableWidget_fut.resizeColumnsToContents()
                 '''
+
+                df_plotdata_cm_call_volume.iloc[0][0] = 0                
+                df_plotdata_cm_put_volume.iloc[0][0] = 0
+                df_plotdata_cm_volume_cha.iloc[0][0] = 0
 
                 콜_미결합 = df_cm_call['미결'].sum()
                 풋_미결합 = df_cm_put['미결'].sum()
@@ -7299,7 +7406,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
     def call_display(self, result):
 
         global opt_callreal_update_counter
-        global df_cm_call, df_plotdata_cm_call, df_plotdata_cm_call_volume
+        global df_cm_call, df_plotdata_cm_call, df_plotdata_cm_call_volume, df_plotdata_cm_call_oi
         global call_atm_value, call_db_percent
         global cm_call_피봇, cm_call_피봇_extend, cm_call_시가, cm_call_시가_extend
         global df_cm_call_che
@@ -7404,6 +7511,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                 df_cm_call.loc[index, '미결'] = int(미결)
                 df_cm_call.loc[index, '미결증감'] = int(미결증감)
+
+                df_plotdata_cm_call_oi.iloc[0][opt_x_idx + 1] = df_cm_call['미결'].sum() - call_oi_percent_init_value
 
                 df_cm_call_che.loc[index, '매도누적체결량'] = int(매도누적체결량)
                 df_cm_call_che.loc[index, '매수누적체결량'] = int(매수누적체결량)
@@ -7683,6 +7792,51 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
         df_cm_call.loc[index, '거래량'] = call_result['누적거래량']
 
+        if comboindex == 1:
+
+            temp = format(df_cm_call.iloc[index]['수정거래량'], ',')
+
+            if temp != self.tableWidget_call.item(index, Option_column.OI.value).text():
+
+                item = QTableWidgetItem(temp)
+                item.setTextAlignment(Qt.AlignCenter)
+
+                if index == df_cm_call['수정거래량'].idxmax():
+                    item.setBackground(QBrush(Qt.green))
+                else:
+                    item.setBackground(QBrush(Qt.white))
+
+                self.tableWidget_call.setItem(index, Option_column.OI.value, item)
+            else:
+                pass
+
+            temp = format(call_volume_total, ',')
+
+            if temp != self.tableWidget_call.horizontalHeaderItem(Option_column.OI.value).text():
+                item = QTableWidgetItem(temp)
+                self.tableWidget_call.setHorizontalHeaderItem(Option_column.OI.value, item)
+            else:
+                pass
+        else:
+
+            temp = format(df_cm_call.iloc[index]['미결'], ',')
+
+            if temp != self.tableWidget_call.item(index, Option_column.OI.value).text():
+
+                item = QTableWidgetItem(temp)
+                item.setTextAlignment(Qt.AlignCenter)
+                self.tableWidget_call.setItem(index, Option_column.OI.value, item)
+            else:
+                pass
+
+            temp = format(df_cm_call['미결'].sum(), ',')
+
+            if temp != self.tableWidget_call.horizontalHeaderItem(Option_column.OI.value).text():
+                item = QTableWidgetItem(temp)
+                self.tableWidget_call.setHorizontalHeaderItem(Option_column.OI.value, item)
+            else:
+                pass
+        '''
         if VOLUME_PLOT:
             temp = format(df_cm_call.iloc[index]['수정거래량'], ',')
 
@@ -7725,6 +7879,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 self.tableWidget_call.setHorizontalHeaderItem(Option_column.OI.value, item)
             else:
                 pass
+        '''
 
         미결증감 = format(df_cm_call.iloc[index]['미결증감'], ',')
 
@@ -7879,6 +8034,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
         global cm_put_피봇, cm_put_피봇_extend, cm_put_시가, cm_put_시가_extend
         global df_cm_put_che
         global put_volume_total
+        global df_plotdata_cm_put_oi, df_plotdata_cm_oi_cha
 
         dt = datetime.datetime.now()
 
@@ -7982,6 +8138,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                 df_cm_put.loc[index, '미결'] = int(미결)
                 df_cm_put.loc[index, '미결증감'] = int(미결증감)
+
+                df_plotdata_cm_put_oi.iloc[0][opt_x_idx + 1] = df_cm_put['미결'].sum() - put_oi_percent_init_value
+                df_plotdata_cm_oi_cha.iloc[0][opt_x_idx + 1] = (df_cm_call['미결'].sum() - call_oi_percent_init_value) - (df_cm_put['미결'].sum() - put_oi_percent_init_value)
 
                 df_cm_put_che.loc[index, '매도누적체결량'] = int(매도누적체결량)
                 df_cm_put_che.loc[index, '매수누적체결량'] = int(매수누적체결량)
@@ -8263,6 +8422,51 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
         df_cm_put.loc[index, '거래량'] = put_result['누적거래량']
 
+        if comboindex == 1:
+
+            temp = format(df_cm_put.iloc[index]['수정거래량'], ',')
+
+            if temp != self.tableWidget_put.item(index, Option_column.OI.value).text():
+
+                item = QTableWidgetItem(temp)
+                item.setTextAlignment(Qt.AlignCenter)
+
+                if index == df_cm_put['수정거래량'].idxmax():
+                    item.setBackground(QBrush(Qt.green))
+                else:
+                    item.setBackground(QBrush(Qt.white))
+
+                self.tableWidget_put.setItem(index, Option_column.OI.value, item)
+            else:
+                pass
+
+            temp = format(put_volume_total, ',')
+
+            if temp != self.tableWidget_put.horizontalHeaderItem(Option_column.OI.value).text():
+                item = QTableWidgetItem(temp)
+                self.tableWidget_put.setHorizontalHeaderItem(Option_column.OI.value, item)
+            else:
+                pass
+        else:
+
+            temp = format(df_cm_put.iloc[index]['미결'], ',')
+
+            if temp != self.tableWidget_put.item(index, Option_column.OI.value).text():
+
+                item = QTableWidgetItem(temp)
+                item.setTextAlignment(Qt.AlignCenter)
+                self.tableWidget_put.setItem(index, Option_column.OI.value, item)
+            else:
+                pass
+
+            temp = format(df_cm_put['미결'].sum(), ',')
+
+            if temp != self.tableWidget_put.horizontalHeaderItem(Option_column.OI.value).text():
+                item = QTableWidgetItem(temp)
+                self.tableWidget_put.setHorizontalHeaderItem(Option_column.OI.value, item)
+            else:
+                pass
+        '''
         if VOLUME_PLOT:
             temp = format(df_cm_put.iloc[index]['수정거래량'], ',')
 
@@ -8305,6 +8509,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 self.tableWidget_put.setHorizontalHeaderItem(Option_column.OI.value, item)
             else:
                 pass
+        '''
 
         미결증감 = format(df_cm_put.iloc[index]['미결증감'], ',')
 
