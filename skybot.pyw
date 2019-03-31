@@ -432,9 +432,27 @@ mistyrose = QColor(255, 228, 225)
 gold = QColor(0xFF, 0xD7, 0x00)
 goldenrod = QColor(0xDA, 0xA5, 0x20)
 
+기본바탕색 = Qt.white
+기본글자검정색 = Qt.black
+기본글자흰색 = Qt.black
+
+콜기준가색 = Qt.red
+콜전고색 = QColor(0xFF, 0xD7, 0x00)
+콜전저색 = QColor(0xDA, 0xA5, 0x20)
+콜종가색 = Qt.darkMagenta
+콜피봇색 = Qt.magenta
+콜시가색 = Qt.darkRed
+
 # 풋 전고, 전저
 skyblue = QColor(0x87, 0xCE, 0xEB)
 steelblue = QColor(0x46, 0x82, 0xB4)
+
+풋기준가색 = Qt.blue
+풋전고색 = QColor(0x87, 0xCE, 0xEB)
+풋전저색 = QColor(0x46, 0x82, 0xB4)
+풋종가색 = Qt.darkCyan
+풋피봇색 = Qt.cyan
+풋시가색 = Qt.darkBlue
 
 futpen=pg.mkPen(blueviolet, width=2, style=QtCore.Qt.SolidLine)
 rpen=pg.mkPen('r', width=2, style=QtCore.Qt.SolidLine)
