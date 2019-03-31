@@ -35,8 +35,7 @@ from PyQt5 import QAxContainer
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
-#from PyQt5.QtWidgets import (QApplication, QLabel, QLineEdit, QMainWindow, QDialog, QMessageBox, QProgressBar)
-from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QLabel
+from PyQt5.QtWidgets import QApplication, QLabel, QLineEdit, QMainWindow, QDialog, QMessageBox, QProgressBar
 from PyQt5.QtGui import QPainter, QColor, QPen
 from PyQt5.QAxContainer import *
 from PyQt5.QtTest import QTest
@@ -483,6 +482,8 @@ fut_jh_line = None
 kp200_curve = None
 call_curve = []
 put_curve = []
+
+volume_base_line = None
 
 cm_call_volume_curve = None
 cm_put_volume_curve = None
@@ -2232,7 +2233,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
         # 수급 tablewidget 초기화
         self.tableWidget_supply.setRowCount(1)
         self.tableWidget_supply.setColumnCount(Supply_column.프로그램.value + 1)
-        self.tableWidget_supply.setHorizontalHeaderLabels(['외인선물', '프로그램', '외인현물', '개인선물', '기관선물', '∑(선물\현물)'])
+        self.tableWidget_supply.setHorizontalHeaderLabels(['외인선물', '프로그램', '외인현물', '개인선물', '기관선물', '∑(선물▬현물)'])
         self.tableWidget_supply.verticalHeader().setVisible(False)
         header = self.tableWidget_supply.horizontalHeader()
         header.setSectionResizeMode(QHeaderView.ResizeToContents)
@@ -11344,12 +11345,12 @@ class 화면_차월물옵션전광판(QDialog, Ui_차월물옵션전광판):
         XQ = t2301(parent=self)
         XQ.Query(월물=nm_month_str, 미니구분='G')
         print('차월물 옵션전광판 데이타를 요청합니다.')
-
+    '''
     @pyqtSlot(int)
     def quoteview_state_changed(self, int):
 
         pass
-
+    '''
     @pyqtSlot(int)
     def _call_horizontal_header_clicked(self, idx):
 
