@@ -3915,14 +3915,15 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 fut_curve.setData(curve2_data)
 
             elif comboindex == 1:
-
+                '''
                 c3 = curve3_data[:opt_x_idx + 2]
 
                 if call_volume_total > put_volume_total:
                     cm_volume_cha_curve.setData(c3, fillLevel=0.0, brush='r')
                 else:
                     cm_volume_cha_curve.setData(c3, fillLevel=0.0, brush='b')
-
+                '''
+                #cm_volume_cha_curve.setData(curve3_data)
                 cm_call_volume_curve.setData(curve1_data)
                 cm_put_volume_curve.setData(curve2_data)
 
@@ -8557,8 +8558,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                         pass
 
                 df_cm_call.loc[index, '수정거래량'] = int(수정거래량)
-                df_plotdata_cm_call_volume.iloc[0][opt_x_idx + 1] = df_cm_call['수정거래량'].sum()
-                call_volume_total = df_cm_call['수정거래량'].sum()
+                #df_plotdata_cm_call_volume.iloc[0][opt_x_idx + 1] = df_cm_call['수정거래량'].sum()
+                #call_volume_total = df_cm_call['수정거래량'].sum()
 
                 df_cm_call.loc[index, '미결'] = int(미결)
                 df_cm_call.loc[index, '미결증감'] = int(미결증감)
@@ -8574,6 +8575,10 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     df_cm_call_che.loc[index, '매수누적체결건수'] = int(매수누적체결건수)
                 else:
                     pass
+
+                df_plotdata_cm_call_volume.iloc[0][opt_x_idx + 1] = df_cm_call_che['매수누적체결량'].sum() - \
+                                                                    df_cm_call_che['매도누적체결량'].sum()
+                call_volume_total = df_cm_call_che['매수누적체결량'].sum() - df_cm_call_che['매도누적체결량'].sum()
 
                 if index == atm_index:
 
@@ -9182,10 +9187,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                 df_cm_put.loc[index, '수정거래량'] = int(수정거래량)
 
-                df_plotdata_cm_put_volume.iloc[0][opt_x_idx + 1] = df_cm_put['수정거래량'].sum()
-                df_plotdata_cm_volume_cha.iloc[0][opt_x_idx + 1] = df_cm_call['수정거래량'].sum() - df_cm_put['수정거래량'].sum()
-
-                put_volume_total = df_cm_put['수정거래량'].sum()
+                #df_plotdata_cm_put_volume.iloc[0][opt_x_idx + 1] = df_cm_put['수정거래량'].sum()
+                #df_plotdata_cm_volume_cha.iloc[0][opt_x_idx + 1] = df_cm_call['수정거래량'].sum() - df_cm_put['수정거래량'].sum()
+                #put_volume_total = df_cm_put['수정거래량'].sum()
 
                 df_cm_put.loc[index, '미결'] = int(미결)
                 df_cm_put.loc[index, '미결증감'] = int(미결증감)
@@ -9202,6 +9206,12 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     df_cm_put_che.loc[index, '매수누적체결건수'] = int(매수누적체결건수)
                 else:
                     pass
+
+                df_plotdata_cm_put_volume.iloc[0][opt_x_idx + 1] = df_cm_put_che['매수누적체결량'].sum() - \
+                                                                    df_cm_put_che['매도누적체결량'].sum()
+                put_volume_total = df_cm_put_che['매수누적체결량'].sum() - df_cm_put_che['매도누적체결량'].sum()
+
+                df_plotdata_cm_volume_cha.iloc[0][opt_x_idx + 1] = abs(call_volume_total) + abs(put_volume_total)
 
                 if index == atm_index:
 
@@ -9884,14 +9894,16 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
         else:
             pass
 
+        '''
         if call_che['매도누적체결량'] > 0:
 
             temp = (call_che['매수누적체결량'] / call_che['매도누적체결량']) * 100
         else:
             temp = 0
+        '''
 
-        #temp = format(call_che['매수누적체결량'] - call_che['매도누적체결량'], ',')
-        item_str = "{0}\n({1:0.0f}%)".format(매도잔량, temp)
+        temp = format(call_che['매수누적체결량'] - call_che['매도누적체결량'], ',')
+        item_str = "{0}\n({1})".format(매도잔량, temp)
 
         if item_str != self.tableWidget_quote.item(0, 3).text():
             item = QTableWidgetItem(item_str)
@@ -10006,14 +10018,16 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
         else:
             pass
 
+        '''
         if put_che['매도누적체결량'] > 0:
 
             temp = (put_che['매수누적체결량'] / put_che['매도누적체결량']) * 100
         else:
             temp = 0
+        '''
 
-        #temp = format(put_che['매수누적체결량'] - put_che['매도누적체결량'], ',')
-        item_str = "{0}\n({1:0.0f}%)".format(매도잔량, temp)
+        temp = format(put_che['매수누적체결량'] - put_che['매도누적체결량'], ',')
+        item_str = "{0}\n({1})".format(매도잔량, temp)
 
         if item_str != self.tableWidget_quote.item(0, 7).text():
             item = QTableWidgetItem(item_str)
