@@ -7690,6 +7690,17 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     item.setTextAlignment(Qt.AlignCenter)
                     self.tableWidget_call.setItem(i, Option_column.시가.value, item)
 
+                    if 시가 > 0:
+
+                        피봇 = self.calc_pivot(df_cm_call.iloc[i]['전저'], df_cm_call.iloc[i]['전고'], df_cm_call.iloc[i]['종가'], 시가)
+                        df_cm_call.loc[i, '피봇'] = 피봇
+
+                        item = QTableWidgetItem("{0:0.2f}".format(df_cm_call.iloc[i]['피봇']))
+                        item.setTextAlignment(Qt.AlignCenter)
+                        self.tableWidget_call.setItem(i, Option_column.피봇.value, item)
+                    else:
+                        pass                    
+
                     저가 = df['저가'][i]
                     df_cm_call.loc[i, '저가'] = df['저가'][i]
 
@@ -7716,6 +7727,17 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     item.setTextAlignment(Qt.AlignCenter)
                     self.tableWidget_put.setItem(i, Option_column.시가.value, item)
 
+                    if 시가 > 0:
+
+                        피봇 = self.calc_pivot(df_cm_put.iloc[i]['전저'], df_cm_put.iloc[i]['전고'], df_cm_put.iloc[i]['종가'], 시가)
+                        df_cm_put.loc[i, '피봇'] = 피봇
+
+                        item = QTableWidgetItem("{0:0.2f}".format(df_cm_put.iloc[i]['피봇']))
+                        item.setTextAlignment(Qt.AlignCenter)
+                        self.tableWidget_put.setItem(i, Option_column.피봇.value, item)
+                    else:
+                        pass                    
+
                     저가 = df1['저가'][i]
                     df_cm_put.loc[i, '저가'] = df1['저가'][i]
 
@@ -7738,6 +7760,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 cm_call_시가 = df_cm_call['시가'].values.tolist()
                 cm_call_시가_extend = self.make_color_list(cm_call_시가)
 
+                cm_call_피봇 = df_cm_call['피봇'].values.tolist()
+                cm_call_피봇_extend = self.make_color_list(cm_call_피봇)
+
                 cm_call_저가 = df_cm_call['저가'].values.tolist()
                 cm_call_저가_extend = self.make_color_list(cm_call_저가)
 
@@ -7746,6 +7771,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                 cm_put_시가 = df_cm_put['시가'].values.tolist()
                 cm_put_시가_extend = self.make_color_list(cm_put_시가)
+
+                cm_put_피봇 = df_cm_put['피봇'].values.tolist()
+                cm_put_피봇_extend = self.make_color_list(cm_put_피봇)
 
                 cm_put_저가 = df_cm_put['저가'].values.tolist()
                 cm_put_저가_extend = self.make_color_list(cm_put_저가)
