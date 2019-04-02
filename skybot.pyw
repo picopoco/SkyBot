@@ -7259,11 +7259,11 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     item.setTextAlignment(Qt.AlignCenter)
                     self.tableWidget_call.setItem(i, Option_column.전고.value, item)
 
-                    if dt.hour < 18:
-
-                        시가 = 0.0
-                    else:
+                    if 18 <= dt.hour < 24 or 0 <= dt.hour < 4:
+                        
                         시가 = df['시가'][i]
+                    else:
+                        시가 = 0.0
 
                     df_cm_call.loc[i, '시가'] = 시가
 
@@ -7446,11 +7446,11 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     item.setTextAlignment(Qt.AlignCenter)
                     self.tableWidget_put.setItem(i, Option_column.전고.value, item)
 
-                    if dt.hour < 18:
-
-                        시가 = 0.0
-                    else:
+                    if 18 <= dt.hour < 24 or 0 <= dt.hour < 4:
+                        
                         시가 = df1['시가'][i]
+                    else:
+                        시가 = 0.0
 
                     df_cm_put.loc[i, '시가'] = 시가
 
@@ -7615,8 +7615,12 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                     df_plotdata_cm_put_volume.iloc[0][0] = 0
                     df_plotdata_cm_volume_cha.iloc[0][0] = 0
-
                 
+                print('\r')
+                print('t2835 call', df_cm_call)
+                print('\r')
+                print('t2835 put', df_cm_put)
+
                 cm_call_전저 = df_cm_call['전저'].values.tolist()
                 cm_call_전저_extend = self.make_color_list(cm_call_전저)
 
