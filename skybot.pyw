@@ -7735,11 +7735,17 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     item.setTextAlignment(Qt.AlignCenter)
                     self.tableWidget_put.setItem(i, Option_column.진폭.value, item)
 
+                cm_call_시가 = df_cm_call['시가'].values.tolist()
+                cm_call_시가_extend = self.make_color_list(cm_call_시가)
+
                 cm_call_저가 = df_cm_call['저가'].values.tolist()
                 cm_call_저가_extend = self.make_color_list(cm_call_저가)
 
                 cm_call_고가 = df_cm_call['고가'].values.tolist()
                 cm_call_고가_extend = self.make_color_list(cm_call_고가)
+
+                cm_put_시가 = df_cm_put['시가'].values.tolist()
+                cm_put_시가_extend = self.make_color_list(cm_put_시가)
 
                 cm_put_저가 = df_cm_put['저가'].values.tolist()
                 cm_put_저가_extend = self.make_color_list(cm_put_저가)
