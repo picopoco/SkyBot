@@ -11665,10 +11665,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 if result['단축코드'][0:3] == '201':
 
                     call_result = copy.deepcopy(result)
-
-                    self.tableWidget_call.blockSignals(True)
                     self.call_display(result)
-                    self.tableWidget_call.blockSignals(False)
 
                     if opt_callreal_update_counter >= 500:
 
@@ -11709,10 +11706,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 elif result['단축코드'][0:3] == '301':
 
                     put_result = copy.deepcopy(result)
-
-                    self.tableWidget_put.blockSignals(True)
                     self.put_display(result)
-                    self.tableWidget_put.blockSignals(False)
 
                     if opt_putreal_update_counter >= 500:
 
