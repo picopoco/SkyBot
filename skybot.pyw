@@ -7683,6 +7683,13 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                 for i in range(nCount_cm_option_pairs):
 
+                    시가 = df['시가'][i]
+                    df_cm_call.loc[i, '시가'] = df['시가'][i]
+
+                    item = QTableWidgetItem("{0:0.2f}".format(시가))
+                    item.setTextAlignment(Qt.AlignCenter)
+                    self.tableWidget_call.setItem(i, Option_column.시가.value, item)
+
                     저가 = df['저가'][i]
                     df_cm_call.loc[i, '저가'] = df['저가'][i]
 
@@ -7701,6 +7708,13 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     item = QTableWidgetItem("{0:0.2f}".format(진폭))
                     item.setTextAlignment(Qt.AlignCenter)
                     self.tableWidget_call.setItem(i, Option_column.진폭.value, item)
+
+                    시가 = df1['시가'][i]
+                    df_cm_put.loc[i, '시가'] = df1['시가'][i]
+
+                    item = QTableWidgetItem("{0:0.2f}".format(시가))
+                    item.setTextAlignment(Qt.AlignCenter)
+                    self.tableWidget_put.setItem(i, Option_column.시가.value, item)
 
                     저가 = df1['저가'][i]
                     df_cm_put.loc[i, '저가'] = df1['저가'][i]
