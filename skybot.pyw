@@ -3928,7 +3928,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 cm_put_volume_curve.setData(curve2_data)
 
             else:
-                cm_oi_cha_curve.setData(curve3_data)
+                #cm_oi_cha_curve.setData(curve3_data)
                 cm_call_oi_curve.setData(curve1_data)
                 cm_put_oi_curve.setData(curve2_data)
 
@@ -8479,7 +8479,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                 item = QTableWidgetItem(result['저가'])
                 item.setTextAlignment(Qt.AlignCenter)
-                item.setBackground(QBrush(옅은회색))
+                item.setBackground(QBrush(옅은회색))                
                 self.tableWidget_call.setItem(index, Option_column.저가.value, item)
 
                 str = '[{0:02d}:{1:02d}:{2:02d}] Call {3} 저가갱신됨 !!!\r'.format(delta_hour, delta_minute, delta_sec,
@@ -8526,7 +8526,6 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     item.setForeground(QBrush(청색))
                 else:
                     item.setForeground(QBrush(검정색))
-
                 self.tableWidget_call.setItem(index, Option_column.현재가.value, item)
 
                 if float(result['현재가']) <= df_cm_call.iloc[index]['시가갭']:
@@ -8576,9 +8575,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 else:
                     pass
 
-                df_plotdata_cm_call_volume.iloc[0][opt_x_idx + 1] = df_cm_call_che['매수누적체결량'].sum() - \
-                                                                    df_cm_call_che['매도누적체결량'].sum()
                 call_volume_total = df_cm_call_che['매수누적체결량'].sum() - df_cm_call_che['매도누적체결량'].sum()
+
+                df_plotdata_cm_call_volume.iloc[0][opt_x_idx + 1] = call_volume_total
 
                 if index == atm_index:
 
@@ -9207,9 +9206,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 else:
                     pass
 
-                df_plotdata_cm_put_volume.iloc[0][opt_x_idx + 1] = df_cm_put_che['매수누적체결량'].sum() - \
-                                                                    df_cm_put_che['매도누적체결량'].sum()
                 put_volume_total = df_cm_put_che['매수누적체결량'].sum() - df_cm_put_che['매도누적체결량'].sum()
+
+                df_plotdata_cm_put_volume.iloc[0][opt_x_idx + 1] = put_volume_total
 
                 df_plotdata_cm_volume_cha.iloc[0][opt_x_idx + 1] = abs(call_volume_total) + abs(put_volume_total)
 
@@ -9748,8 +9747,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
         temp = (call_quote['매수잔량'] + call_quote['매도잔량']) - (put_quote['매수잔량'] + put_quote['매도잔량'])
         잔량차 = format(temp, ',')
 
-        item_str = "{0:0.2f}/{1:0.2f}\n({2}/{3})".format(call_count_ratio - put_count_ratio,
-                                                         call_remainder_ratio - put_remainder_ratio,
+        item_str = "{0:0.2f}/{1:0.2f}\n({2}/{3})".format(abs(call_count_ratio - put_count_ratio),
+                                                         abs(call_remainder_ratio - put_remainder_ratio),
                                                          건수차, 잔량차)
 
         if item_str != self.tableWidget_quote.item(0, 12).text():
@@ -11666,7 +11665,10 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 if result['단축코드'][0:3] == '201':
 
                     call_result = copy.deepcopy(result)
+
+                    self.tableWidget_call.blockSignals(True)
                     self.call_display(result)
+                    self.tableWidget_call.blockSignals(False)
 
                     if opt_callreal_update_counter >= 500:
 
@@ -11707,7 +11709,10 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 elif result['단축코드'][0:3] == '301':
 
                     put_result = copy.deepcopy(result)
+
+                    self.tableWidget_put.blockSignals(True)
                     self.put_display(result)
+                    self.tableWidget_put.blockSignals(False)
 
                     if opt_putreal_update_counter >= 500:
 
