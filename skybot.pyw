@@ -3460,10 +3460,10 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
             if not pre_start:
 
-                if call_volume_total > put_volume_total:
+                if call_volume_total > put_volume_total and call_volume_total > 0 and put_volume_total < 0:
                     self.label_msg.setStyleSheet('background-color: red; color: white')
                     self.label_msg.setFont(QtGui.QFont("Consolas", 9, QtGui.QFont.Bold))
-                elif call_volume_total < put_volume_total:
+                elif call_volume_total < put_volume_total and call_volume_total < 0 and put_volume_total > 0:
                     self.label_msg.setStyleSheet('background-color: blue; color: white')
                     self.label_msg.setFont(QtGui.QFont("Consolas", 9, QtGui.QFont.Bold))
                 else:
