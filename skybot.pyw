@@ -4556,25 +4556,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
     def callnode_color_check(self):
 
-        global cm_call_저가, cm_call_저가_extend, cm_call_고가, cm_call_고가_extend
-
         if call_scroll_end_position <= nCount_cm_option_pairs:
 
             start_time = timeit.default_timer()
-
-            if df_cm_call['저가'].values.tolist() != cm_call_저가:
-
-                cm_call_저가 = df_cm_call['저가'].values.tolist()
-                cm_call_저가_extend = self.make_color_list(cm_call_저가)
-            else:
-                pass
-
-            if df_cm_call['고가'].values.tolist() != cm_call_고가:
-
-                cm_call_고가 = df_cm_call['고가'].values.tolist()
-                cm_call_고가_extend = self.make_color_list(cm_call_고가)
-            else:
-                pass
 
             for i in range(call_scroll_begin_position, call_scroll_end_position):
 
@@ -4633,17 +4617,11 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 else:
                     pass
 
-                if df_cm_call.iloc[i]['저가'] != df_cm_call.iloc[i]['현재가']:
-                    self.tableWidget_call.item(i, Option_column.저가.value).setBackground(QBrush(기본바탕색))
-                    self.tableWidget_call.item(i, Option_column.저가.value).setForeground(QBrush(검정색))
-                else:
-                    pass
+                self.tableWidget_call.item(i, Option_column.저가.value).setBackground(QBrush(기본바탕색))
+                self.tableWidget_call.item(i, Option_column.저가.value).setForeground(QBrush(검정색))
 
-                if df_cm_call.iloc[i]['고가'] != df_cm_call.iloc[i]['현재가']:
-                    self.tableWidget_call.item(i, Option_column.고가.value).setBackground(QBrush(기본바탕색))
-                    self.tableWidget_call.item(i, Option_column.고가.value).setForeground(QBrush(검정색))
-                else:
-                    pass
+                self.tableWidget_call.item(i, Option_column.고가.value).setBackground(QBrush(기본바탕색))
+                self.tableWidget_call.item(i, Option_column.고가.value).setForeground(QBrush(검정색))
 
                 # 콜 기준가, 월저, 월고, 전저, 전고 컬러링
                 if call_node_state['기준가']:
@@ -5227,25 +5205,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
     def putnode_color_check(self):
 
-        global cm_put_저가, cm_put_저가_extend, cm_put_고가, cm_put_고가_extend
-
         if put_scroll_end_position <= nCount_cm_option_pairs:
 
             start_time = timeit.default_timer()
-
-            if df_cm_put['저가'].values.tolist() != cm_put_저가:
-
-                cm_put_저가 = df_cm_put['저가'].values.tolist()
-                cm_put_저가_extend = self.make_color_list(cm_put_저가)
-            else:
-                pass
-
-            if df_cm_put['고가'].values.tolist() != cm_put_고가:
-
-                cm_put_고가 = df_cm_put['고가'].values.tolist()
-                cm_put_고가_extend = self.make_color_list(cm_put_고가)
-            else:
-                pass
 
             for i in range(put_scroll_begin_position, put_scroll_end_position):
 
@@ -5304,18 +5266,12 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 else:
                     pass
 
-                if df_cm_put.iloc[i]['저가'] != df_cm_put.iloc[i]['현재가']:
-                    self.tableWidget_put.item(i, Option_column.저가.value).setBackground(QBrush(기본바탕색))
-                    self.tableWidget_put.item(i, Option_column.저가.value).setForeground(QBrush(검정색))
-                else:
-                    pass
+                self.tableWidget_put.item(i, Option_column.저가.value).setBackground(QBrush(기본바탕색))
+                self.tableWidget_put.item(i, Option_column.저가.value).setForeground(QBrush(검정색))
 
-                if df_cm_put.iloc[i]['고가'] != df_cm_put.iloc[i]['현재가']:
-                    self.tableWidget_put.item(i, Option_column.고가.value).setBackground(QBrush(기본바탕색))
-                    self.tableWidget_put.item(i, Option_column.고가.value).setForeground(QBrush(검정색))
-                else:
-                    pass
-                    
+                self.tableWidget_put.item(i, Option_column.고가.value).setBackground(QBrush(기본바탕색))
+                self.tableWidget_put.item(i, Option_column.고가.value).setForeground(QBrush(검정색))
+
                 # 풋 기준가, 월저, 월고, 전저, 전고 컬러링
                 if put_node_state['기준가']:
 
@@ -8343,6 +8299,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
         global cm_call_피봇, cm_call_피봇_extend, cm_call_시가, cm_call_시가_extend
         global df_cm_call_che
         global call_volume_total
+        global cm_call_저가, cm_call_저가_extend, cm_call_고가, cm_call_고가_extend
 
         dt = datetime.datetime.now()
 
@@ -8366,6 +8323,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                                                                               result['저가'])
                 self.textBrowser.append(str)
 
+                cm_call_저가 = df_cm_call['저가'].values.tolist()
+                cm_call_저가_extend = self.make_color_list(cm_call_저가)
+
                 item = QTableWidgetItem("{0:0.2f}".format(float(result['고가']) - float(result['저가'])))
                 item.setTextAlignment(Qt.AlignCenter)
                 self.tableWidget_call.setItem(index, Option_column.진폭.value, item)
@@ -8384,6 +8344,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 str = '[{0:02d}:{1:02d}:{2:02d}] Call {3} 고가갱신됨 !!!\r'.format(delta_hour, delta_minute, delta_sec,
                                                                               result['고가'])
                 self.textBrowser.append(str)
+
+                cm_call_고가 = df_cm_call['고가'].values.tolist()
+                cm_call_고가_extend = self.make_color_list(cm_call_고가)
 
                 item = QTableWidgetItem("{0:0.2f}".format(float(result['고가']) - float(result['저가'])))
                 item.setTextAlignment(Qt.AlignCenter)
@@ -8926,6 +8889,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
         global df_cm_put_che
         global put_volume_total
         global df_plotdata_cm_put_oi, df_plotdata_cm_oi_cha
+        global cm_put_저가, cm_put_저가_extend, cm_put_고가, cm_put_고가_extend
 
         dt = datetime.datetime.now()
 
@@ -8949,6 +8913,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                                                                               result['저가'])
                 self.textBrowser.append(str)
 
+                cm_put_저가 = df_cm_put['저가'].values.tolist()
+                cm_put_저가_extend = self.make_color_list(cm_put_저가)
+
                 item = QTableWidgetItem("{0:0.2f}".format(float(result['고가']) - float(result['저가'])))
                 item.setTextAlignment(Qt.AlignCenter)
                 self.tableWidget_put.setItem(index, Option_column.진폭.value, item)
@@ -8967,6 +8934,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 str = '[{0:02d}:{1:02d}:{2:02d}] Put {3} 고가갱신됨 !!!\r'.format(delta_hour, delta_minute, delta_sec,
                                                                              result['고가'])
                 self.textBrowser.append(str)
+
+                cm_put_고가 = df_cm_put['고가'].values.tolist()
+                cm_put_고가_extend = self.make_color_list(cm_put_고가)
 
                 item = QTableWidgetItem("{0:0.2f}".format(float(result['고가']) - float(result['저가'])))
                 item.setTextAlignment(Qt.AlignCenter)
