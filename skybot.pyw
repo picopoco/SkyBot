@@ -8387,7 +8387,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                 item = QTableWidgetItem(result['저가'])
                 item.setTextAlignment(Qt.AlignCenter)
-                item.setBackground(QBrush(옅은회색))                
+                #item.setBackground(QBrush(옅은회색))                
                 self.tableWidget_call.setItem(index, Option_column.저가.value, item)
 
                 str = '[{0:02d}:{1:02d}:{2:02d}] Call {3} 저가갱신됨 !!!\r'.format(delta_hour, delta_minute, delta_sec,
@@ -8406,7 +8406,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                 item = QTableWidgetItem(result['고가'])
                 item.setTextAlignment(Qt.AlignCenter)
-                item.setBackground(QBrush(옅은회색))
+                #item.setBackground(QBrush(옅은회색))
                 self.tableWidget_call.setItem(index, Option_column.고가.value, item)
 
                 str = '[{0:02d}:{1:02d}:{2:02d}] Call {3} 고가갱신됨 !!!\r'.format(delta_hour, delta_minute, delta_sec,
@@ -8970,7 +8970,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                 item = QTableWidgetItem(result['저가'])
                 item.setTextAlignment(Qt.AlignCenter)
-                item.setBackground(QBrush(옅은회색))
+                #item.setBackground(QBrush(옅은회색))
                 self.tableWidget_put.setItem(index, Option_column.저가.value, item)
 
                 str = '[{0:02d}:{1:02d}:{2:02d}] Put {3} 저가갱신됨 !!!\r'.format(delta_hour, delta_minute, delta_sec,
@@ -8989,7 +8989,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                 item = QTableWidgetItem(result['고가'])
                 item.setTextAlignment(Qt.AlignCenter)
-                item.setBackground(QBrush(옅은회색))
+                #item.setBackground(QBrush(옅은회색))
                 self.tableWidget_put.setItem(index, Option_column.고가.value, item)
 
                 str = '[{0:02d}:{1:02d}:{2:02d}] Put {3} 고가갱신됨 !!!\r'.format(delta_hour, delta_minute, delta_sec,
