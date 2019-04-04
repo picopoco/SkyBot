@@ -3606,25 +3606,25 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                                 if min(temp) > 0:
 
-                                    str = '[{0:0.2f}] [{1:0.2f}/{2:0.2f}] [{3}] ↗'.format(
+                                    str = '[{0:0.2f}] [{1:0.2f}/{2:0.2f}] [{3}/{4}] ↗'.format(
                                         fut_realdata['현재가'] - fut_realdata['KP200'],
                                         call_atm_value + put_atm_value,
                                         abs(call_atm_value - put_atm_value),
-                                        format(abs(oi_delta), ','))
+                                        format(call_oi_delta, ','), format(put_oi_delta, ','))
                                 elif max(temp) < 0:
 
-                                    str = '[{0:0.2f}] [{1:0.2f}/{2:0.2f}] [{3}] ↘'.format(
+                                    str = '[{0:0.2f}] [{1:0.2f}/{2:0.2f}] [{3}/{4}] ↘'.format(
                                         fut_realdata['현재가'] - fut_realdata['KP200'],
                                         call_atm_value + put_atm_value,
                                         abs(call_atm_value - put_atm_value),
-                                        format(abs(oi_delta), ','))
+                                        format(call_oi_delta, ','), format(put_oi_delta, ','))
                                 else:
 
-                                    str = '[{0:0.2f}] [{1:0.2f}/{2:0.2f}] [{3}]'.format(
+                                    str = '[{0:0.2f}] [{1:0.2f}/{2:0.2f}] [{3}/{4}]'.format(
                                         fut_realdata['현재가'] - fut_realdata['KP200'],
                                         call_atm_value + put_atm_value,
                                         abs(call_atm_value - put_atm_value),
-                                        format(abs(oi_delta), ','))
+                                        format(call_oi_delta, ','), format(put_oi_delta, ','))
 
                             elif oi_delta < 0:
 
@@ -3633,25 +3633,25 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                                 if min(temp) > 0:
 
-                                    str = '[{0:0.2f}] [{1:0.2f}/{2:0.2f}] [{3}] ↘'.format(
+                                    str = '[{0:0.2f}] [{1:0.2f}/{2:0.2f}] [{3}/{4}] ↘'.format(
                                         fut_realdata['현재가'] - fut_realdata['KP200'],
                                         call_atm_value + put_atm_value,
                                         abs(call_atm_value - put_atm_value),
-                                        format(abs(oi_delta), ','))
+                                        format(call_oi_delta, ','), format(put_oi_delta, ','))
                                 elif max(temp) < 0:
 
-                                    str = '[{0:0.2f}] [{1:0.2f}/{2:0.2f}] [{3}] ↗'.format(
+                                    str = '[{0:0.2f}] [{1:0.2f}/{2:0.2f}] [{3}/{4}] ↗'.format(
                                         fut_realdata['현재가'] - fut_realdata['KP200'],
                                         call_atm_value + put_atm_value,
                                         abs(call_atm_value - put_atm_value),
-                                        format(abs(oi_delta), ','))
+                                        format(call_oi_delta, ','), format(put_oi_delta, ','))
                                 else:
 
-                                    str = '[{0:0.2f}] [{1:0.2f}/{2:0.2f}] [{3}]'.format(
+                                    str = '[{0:0.2f}] [{1:0.2f}/{2:0.2f}] [{3}/{4}]'.format(
                                         fut_realdata['현재가'] - fut_realdata['KP200'],
                                         call_atm_value + put_atm_value,
                                         abs(call_atm_value - put_atm_value),
-                                        format(abs(oi_delta), ','))
+                                        format(call_oi_delta, ','), format(put_oi_delta, ','))
 
                             else:
                                 self.label_atm.setStyleSheet('background-color: yellow; color: black')
