@@ -2035,7 +2035,7 @@ class Plot_Worker(QThread):
             call_curve_data = df_plotdata_cm_call.iloc[index].values.tolist()
             put_curve_data = df_plotdata_cm_put.iloc[index].values.tolist()
 
-            if comboindex == 0:
+            if comboindex == 2:
 
                 curve1_data = df_plotdata_kp200.iloc[0].values.tolist()
                 curve2_data = df_plotdata_fut.iloc[0].values.tolist()
@@ -2059,7 +2059,7 @@ class Plot_Worker(QThread):
                 return call_curve_data, put_curve_data, curve1_data, curve2_data, curve3_data
         except:
 
-            if comboindex == 0:
+            if comboindex == 2:
 
                 return None, None, None, None
             else:
@@ -2262,7 +2262,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
         self.tableWidget_supply.verticalHeader().setStretchLastSection(True)
         self.tableWidget_supply.clearContents()
 
-        self.comboBox1.addItems(['F-Plot', 'V-Plot', 'O-Plot'])
+        self.comboBox1.addItems(['O-Plot', 'V-Plot', 'F-Plot'])
         self.comboBox1.currentIndexChanged.connect(self.selectionChanged)
 
         self.상태그림 = ['▼', '▬', '▲']
@@ -2519,7 +2519,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
         txt = self.comboBox1.currentText()
         comboindex = self.comboBox1.currentIndex()
 
-        if comboindex == 0:
+        if comboindex == 2:
 
             cm_call_volume_curve.clear()
             cm_put_volume_curve.clear()
@@ -3790,7 +3790,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
             if x_idx > 10 and opt_x_idx > 10:
 
-                if comboindex == 0:
+                if comboindex == 2:
 
                     time_line_fut.setValue(x_idx + 1)
                 else:
@@ -3800,7 +3800,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             else:
                 pass
 
-            if comboindex == 0:
+            if comboindex == 2:
 
                 fut_jl_line.setValue(fut_realdata['전저'])
                 fut_jh_line.setValue(fut_realdata['전고'])
@@ -3844,12 +3844,12 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 curve1_data = infos[2]
                 curve2_data = infos[3]
 
-                if comboindex == 0:
+                if comboindex == 2:
                     pass
                 else:
                     curve3_data = infos[4]                
 
-            if comboindex == 0:
+            if comboindex == 2:
 
                 kp200_curve.setData(curve1_data)
                 fut_curve.setData(curve2_data)
