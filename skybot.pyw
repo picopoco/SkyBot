@@ -3153,8 +3153,6 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     self.tableWidget_call.item(i, Option_column.고가.value).setForeground(QBrush(검정색))
 
             self.call_node_color_clear()
-            self.put_node_color_clear()
-
             self.callnode_color_check()
 
         return
@@ -3218,10 +3216,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                     self.tableWidget_put.item(i, Option_column.고가.value).setBackground(QBrush(기본바탕색))
                     self.tableWidget_put.item(i, Option_column.고가.value).setForeground(QBrush(검정색))
-
-            self.call_node_color_clear()
+            
             self.put_node_color_clear()
-
             self.putnode_color_check()
 
         return
@@ -3641,18 +3637,6 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     pass
                 '''
             else:
-                pass            
-
-            if x_idx > 10 and opt_x_idx > 10:
-
-                if comboindex1 == 2:
-
-                    time_line_fut.setValue(x_idx + 1)
-                else:
-                    time_line_fut.setValue(opt_x_idx + 1)
-
-                time_line_opt.setValue(opt_x_idx + 1)
-            else:
                 pass
                                    
             if comboindex2 == 2:
@@ -3669,7 +3653,19 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     call_curve[i].clear()
                     put_curve[i].clear()
             else:
-                pass        
+                pass
+
+            if x_idx > 10 and opt_x_idx > 10:
+
+                if comboindex1 == 2:
+
+                    time_line_fut.setValue(x_idx + 1)
+                else:
+                    time_line_fut.setValue(opt_x_idx + 1)
+
+                time_line_opt.setValue(opt_x_idx + 1)
+            else:
+                pass       
 
             for actval, infos in data.items():
 
