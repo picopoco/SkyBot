@@ -2057,12 +2057,25 @@ class Plot_Worker(QThread):
             else:                
                 curve1_data = df_plotdata_kp200.iloc[0].values.tolist()
                 curve2_data = df_plotdata_fut.iloc[0].values.tolist()
+            
+            if comboindex2 == 0:
+                
+                curve3_data = df_plotdata_cm_call_volume.iloc[0].values.tolist()
+                curve4_data = df_plotdata_cm_put_volume.iloc[0].values.tolist()          
 
-            return call_curve_data, put_curve_data, curve1_data, curve2_data
+            elif comboindex2 == 1:
+                
+                curve3_data = df_plotdata_cm_call_oi.iloc[0].values.tolist()
+                curve4_data = df_plotdata_cm_put_oi.iloc[0].values.tolist()     
+            else:                
+                curve3_data = None
+                curve4_data = None
+            
+            return call_curve_data, put_curve_data, curve1_data, curve2_data, curve3_data, curve4_data
 
         except:
 
-            return None, None, None, None
+            return None, None, None, None, None, None
 
 ########################################################################################################################
 
@@ -2527,6 +2540,11 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
         comboindex1 = self.comboBox1.currentIndex()
 
         if comboindex1 == 0:
+            
+            fut_jl_line.setValue(0)
+            fut_jh_line.setValue(0)
+            fut_pivot_line.setValue(0)
+            volume_base_line.setValue(0)
 
             kp200_curve.clear()
             fut_curve.clear()
@@ -2552,6 +2570,11 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
         elif comboindex1 == 1:
 
+            fut_jl_line.setValue(0)
+            fut_jh_line.setValue(0)
+            fut_pivot_line.setValue(0)
+            volume_base_line.setValue(0)
+
             kp200_curve.clear()
             fut_curve.clear()
 
@@ -2574,7 +2597,12 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             call_temp = format(df_cm_call['수정거래량'].sum(), ',')
             put_temp = format(df_cm_put['수정거래량'].sum(), ',')
 
-        else:            
+        else: 
+
+            fut_jl_line.setValue(fut_realdata['전저'])
+            fut_jh_line.setValue(fut_realdata['전고'])
+            volume_base_line.setValue(fut_realdata['피봇'])
+            fut_pivot_line.setValue(fut_realdata['피봇'])           
 
             cm_call_volume_curve.clear()
             cm_put_volume_curve.clear()
@@ -2628,8 +2656,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
         if comboindex2 == 0:
 
             for i in range(9):
-                call_curve.clear()
-                put_curve.clear()
+                mv_line[i].setValue(0)
+                call_curve[i].clear()
+                put_curve[i].clear()                
             
             cm_call_oi_right_curve.clear()
             cm_put_oi_right_curve.clear()
@@ -2637,8 +2666,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
         elif comboindex2 == 1:
 
             for i in range(9):
-                call_curve.clear()
-                put_curve.clear()
+                mv_line[i].setValue(0)
+                call_curve[i].clear()
+                put_curve[i].clear()
 
             cm_call_volume_right_curve.clear()
             cm_put_volume_right_curve.clear()
@@ -3564,47 +3594,54 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             selected_call = call_idx
             selected_put = put_idx 
 
-            # 옵션 Y축 최대값 구하기
-            axY = self.Plot_Opt.getAxis('left')
-            #print('옵션 y axis range: {}'.format(axY.range[1]))
+            if comboindex2 == 2:
 
-            mv_line[0].setValue(1.2)
-            mv_line[1].setValue(2.5)
-            mv_line[2].setValue(3.5)
-            mv_line[3].setValue(4.85)
+                # 옵션 Y축 최대값 구하기
+                #axY = self.Plot_Opt.getAxis('left')
+                #print('옵션 y axis range: {}'.format(axY.range[1]))
 
-            if 5.1 < axY.range[1] < 5.5:
-                mv_line[4].setValue(5.1)
-                mv_line[5].setValue(0)
-                mv_line[6].setValue(0)
-                mv_line[7].setValue(0)
-                mv_line[8].setValue(0)
-            elif 5.5 <= axY.range[1] < 6.0:
+                mv_line[0].setValue(1.2)
+                mv_line[1].setValue(2.5)
+                mv_line[2].setValue(3.5)
+                mv_line[3].setValue(4.85)
                 mv_line[4].setValue(5.1)
                 mv_line[5].setValue(5.5)
-                mv_line[6].setValue(0)
-                mv_line[7].setValue(0)
-                mv_line[8].setValue(0)
-            elif 6.0 <= axY.range[1] < 7.1:
-                mv_line[4].setValue(5.1)
-                mv_line[5].setValue(5.5)
-                mv_line[6].setValue(6.85)
-                mv_line[7].setValue(0)
-                mv_line[8].setValue(0)
-            elif 7.1 <= axY.range[1] < 8.1:
-                mv_line[4].setValue(5.1)
-                mv_line[5].setValue(5.5)
-                mv_line[6].setValue(6.85)
-                mv_line[7].setValue(7.1)
-                mv_line[8].setValue(0)
-            elif axY.range[1] >= 8.1:
-                mv_line[4].setValue(5.1)
-                mv_line[5].setValue(5.5)
-                mv_line[6].setValue(6.85)
-                mv_line[7].setValue(7.1)
-                mv_line[8].setValue(8.1)
+                '''
+                if 5.1 < axY.range[1] < 5.5:
+                    mv_line[4].setValue(5.1)
+                    mv_line[5].setValue(0)
+                    mv_line[6].setValue(0)
+                    mv_line[7].setValue(0)
+                    mv_line[8].setValue(0)
+                elif 5.5 <= axY.range[1] < 6.0:
+                    mv_line[4].setValue(5.1)
+                    mv_line[5].setValue(5.5)
+                    mv_line[6].setValue(0)
+                    mv_line[7].setValue(0)
+                    mv_line[8].setValue(0)
+                elif 6.0 <= axY.range[1] < 7.1:
+                    mv_line[4].setValue(5.1)
+                    mv_line[5].setValue(5.5)
+                    mv_line[6].setValue(6.85)
+                    mv_line[7].setValue(0)
+                    mv_line[8].setValue(0)
+                elif 7.1 <= axY.range[1] < 8.1:
+                    mv_line[4].setValue(5.1)
+                    mv_line[5].setValue(5.5)
+                    mv_line[6].setValue(6.85)
+                    mv_line[7].setValue(7.1)
+                    mv_line[8].setValue(0)
+                elif axY.range[1] >= 8.1:
+                    mv_line[4].setValue(5.1)
+                    mv_line[5].setValue(5.5)
+                    mv_line[6].setValue(6.85)
+                    mv_line[7].setValue(7.1)
+                    mv_line[8].setValue(8.1)
+                else:
+                    pass
+                '''
             else:
-                pass
+                pass            
 
             if x_idx > 10 and opt_x_idx > 10:
 
@@ -3617,26 +3654,22 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 time_line_opt.setValue(opt_x_idx + 1)
             else:
                 pass
+                                   
+            if comboindex2 == 2:
+                '''
+                # clear all view tablewidget curve
+                dummy = [np.nan] * (opt_x_idx + 1)
+                dummy[0] = 0
 
-            if comboindex1 == 2:
-
-                fut_jl_line.setValue(fut_realdata['전저'])
-                fut_jh_line.setValue(fut_realdata['전고'])
-                volume_base_line.setValue(fut_realdata['피봇'])
-                fut_pivot_line.setValue(fut_realdata['피봇'])
+                for i in range(9):
+                    call_curve[i].setData(dummy)
+                    put_curve[i].setData(dummy)
+                '''
+                for i in range(9):
+                    call_curve[i].clear()
+                    put_curve[i].clear()
             else:
-                fut_jl_line.setValue(0)
-                fut_jh_line.setValue(0)
-                fut_pivot_line.setValue(0)
-                volume_base_line.setValue(0)                       
-
-            # clear all view tablewidget curve
-            dummy = [np.nan] * (opt_x_idx + 1)
-            dummy[0] = 0
-
-            for i in range(9):
-                call_curve[i].setData(dummy)
-                put_curve[i].setData(dummy)        
+                pass        
 
             for actval, infos in data.items():
 
@@ -3646,7 +3679,10 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                     if index == call_idx[i]:
 
-                        call_curve[i].setData(infos[0])
+                        if comboindex2 == 2:
+                            call_curve[i].setData(infos[0])
+                        else:
+                            pass
                     else:
                         pass                    
 
@@ -3654,59 +3690,42 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                     if index == put_idx[i]:
 
-                        put_curve[i].setData(infos[1])
+                        if comboindex2 == 2:
+                            put_curve[i].setData(infos[1])
+                        else:
+                            pass
                     else:
                         pass
 
                 curve1_data = infos[2]
-                curve2_data = infos[3]            
-            '''
+                curve2_data = infos[3] 
+                curve3_data = infos[4]
+                curve4_data = infos[5]
+            
             # 오른쪽 그래프 선택
             if comboindex2 == 0:
 
-                for i in range(9):
-                    mv_line[i].setValue(0)
-
-                cm_call_volume_right_curve.setData(curve5_data)
-                cm_put_volume_right_curve.setData(curve6_data)
+                cm_call_volume_right_curve.setData(curve3_data)
+                cm_put_volume_right_curve.setData(curve4_data)
 
             elif comboindex2 == 1:
-
-                for i in range(9):
-                    mv_line[i].setValue(0)
 
                 cm_call_oi_right_curve.setData(curve3_data)
                 cm_put_oi_right_curve.setData(curve4_data)
             else:
                 pass
-            '''
+            
             # 왼쪽 그래프 선택
             if comboindex1 == 0:
-
-                fut_jl_line.setValue(0)
-                fut_jh_line.setValue(0)
-                fut_pivot_line.setValue(0)
-                volume_base_line.setValue(0)
 
                 cm_call_oi_curve.setData(curve1_data)
                 cm_put_oi_curve.setData(curve2_data)
 
             elif comboindex1 == 1:
-
-                fut_jl_line.setValue(0)
-                fut_jh_line.setValue(0)
-                fut_pivot_line.setValue(0)
-                volume_base_line.setValue(0)
                 
                 cm_call_volume_curve.setData(curve1_data)
                 cm_put_volume_curve.setData(curve2_data)
-
             else:
-                fut_jl_line.setValue(fut_realdata['전저'])
-                fut_jh_line.setValue(fut_realdata['전고'])
-                volume_base_line.setValue(fut_realdata['피봇'])
-                fut_pivot_line.setValue(fut_realdata['피봇'])
-
                 kp200_curve.setData(curve1_data)
                 fut_curve.setData(curve2_data)            
 
