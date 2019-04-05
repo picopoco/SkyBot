@@ -181,18 +181,7 @@
         <widget class="QComboBox" name="comboBox1"/>
        </item>
        <item>
-        <widget class="QCheckBox" name="checkBox_quoteview">
-         <property name="font">
-          <font>
-           <family>Consolas</family>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Q-View</string>
-         </property>
-        </widget>
+        <widget class="QComboBox" name="comboBox2"/>
        </item>
        <item>
         <widget class="QCheckBox" name="checkBox_realtime">
