@@ -2973,41 +2973,6 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
             print('call scroll position -----> from %d to %d' % (call_scroll_begin_position, call_scroll_end_position))
 
-            for i in range(call_scroll_begin_position, call_scroll_end_position):
-
-                if df_cm_call.iloc[i]['저가'] < df_cm_call.iloc[i]['고가']:
-
-                    # Clear Color
-                    self.tableWidget_call.item(i, Option_column.기준가.value).setBackground(QBrush(기본바탕색))
-                    self.tableWidget_call.item(i, Option_column.기준가.value).setForeground(QBrush(검정색))
-
-                    self.tableWidget_call.item(i, Option_column.월저.value).setBackground(QBrush(기본바탕색))
-                    self.tableWidget_call.item(i, Option_column.월저.value).setForeground(QBrush(검정색))
-
-                    self.tableWidget_call.item(i, Option_column.월고.value).setBackground(QBrush(기본바탕색))
-                    self.tableWidget_call.item(i, Option_column.월고.value).setForeground(QBrush(검정색))
-
-                    self.tableWidget_call.item(i, Option_column.전저.value).setBackground(QBrush(기본바탕색))
-                    self.tableWidget_call.item(i, Option_column.전저.value).setForeground(QBrush(검정색))
-
-                    self.tableWidget_call.item(i, Option_column.전고.value).setBackground(QBrush(기본바탕색))
-                    self.tableWidget_call.item(i, Option_column.전고.value).setForeground(QBrush(검정색))
-
-                    self.tableWidget_call.item(i, Option_column.종가.value).setBackground(QBrush(기본바탕색))
-                    self.tableWidget_call.item(i, Option_column.종가.value).setForeground(QBrush(검정색))
-
-                    self.tableWidget_call.item(i, Option_column.피봇.value).setBackground(QBrush(기본바탕색))
-                    self.tableWidget_call.item(i, Option_column.피봇.value).setForeground(QBrush(검정색))
-
-                    self.tableWidget_call.item(i, Option_column.시가.value).setBackground(QBrush(기본바탕색))
-                    self.tableWidget_call.item(i, Option_column.시가.value).setForeground(QBrush(검정색))
-
-                    self.tableWidget_call.item(i, Option_column.저가.value).setBackground(QBrush(기본바탕색))
-                    self.tableWidget_call.item(i, Option_column.저가.value).setForeground(QBrush(검정색))
-
-                    self.tableWidget_call.item(i, Option_column.고가.value).setBackground(QBrush(기본바탕색))
-                    self.tableWidget_call.item(i, Option_column.고가.value).setForeground(QBrush(검정색))
-
             self.call_node_color_clear()
             self.callnode_color_check()
 
@@ -3038,41 +3003,6 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
             print('put scroll position -----> from %d to %d' % (put_scroll_begin_position, put_scroll_end_position))
 
-            for i in range(put_scroll_begin_position, put_scroll_end_position):
-
-                if df_cm_put.iloc[i]['저가'] < df_cm_put.iloc[i]['고가']:
-
-                    # Clear Color
-                    self.tableWidget_put.item(i, Option_column.기준가.value).setBackground(QBrush(기본바탕색))
-                    self.tableWidget_put.item(i, Option_column.기준가.value).setForeground(QBrush(검정색))
-
-                    self.tableWidget_put.item(i, Option_column.월저.value).setBackground(QBrush(기본바탕색))
-                    self.tableWidget_put.item(i, Option_column.월저.value).setForeground(QBrush(검정색))
-
-                    self.tableWidget_put.item(i, Option_column.월고.value).setBackground(QBrush(기본바탕색))
-                    self.tableWidget_put.item(i, Option_column.월고.value).setForeground(QBrush(검정색))
-
-                    self.tableWidget_put.item(i, Option_column.전저.value).setBackground(QBrush(기본바탕색))
-                    self.tableWidget_put.item(i, Option_column.전저.value).setForeground(QBrush(검정색))
-
-                    self.tableWidget_put.item(i, Option_column.전고.value).setBackground(QBrush(기본바탕색))
-                    self.tableWidget_put.item(i, Option_column.전고.value).setForeground(QBrush(검정색))
-
-                    self.tableWidget_put.item(i, Option_column.종가.value).setBackground(QBrush(기본바탕색))
-                    self.tableWidget_put.item(i, Option_column.종가.value).setForeground(QBrush(검정색))
-
-                    self.tableWidget_put.item(i, Option_column.피봇.value).setBackground(QBrush(기본바탕색))
-                    self.tableWidget_put.item(i, Option_column.피봇.value).setForeground(QBrush(검정색))
-
-                    self.tableWidget_put.item(i, Option_column.시가.value).setBackground(QBrush(기본바탕색))
-                    self.tableWidget_put.item(i, Option_column.시가.value).setForeground(QBrush(검정색))
-
-                    self.tableWidget_put.item(i, Option_column.저가.value).setBackground(QBrush(기본바탕색))
-                    self.tableWidget_put.item(i, Option_column.저가.value).setForeground(QBrush(검정색))
-
-                    self.tableWidget_put.item(i, Option_column.고가.value).setBackground(QBrush(기본바탕색))
-                    self.tableWidget_put.item(i, Option_column.고가.value).setForeground(QBrush(검정색))
-            
             self.put_node_color_clear()
             self.putnode_color_check()
 
