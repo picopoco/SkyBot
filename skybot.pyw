@@ -3147,162 +3147,158 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     else:
                         pass
 
-                    if not pre_start:                        
-                    
-                        # 체결량 갱신
-                        self.call_che_display()
-                        self.put_che_display()
+                    # 체결량 갱신
+                    self.call_che_display()
+                    self.put_che_display()
 
-                        global 콜저가리스트, 콜고가리스트, 풋저가리스트, 풋고가리스트
+                    global 콜저가리스트, 콜고가리스트, 풋저가리스트, 풋고가리스트
 
-                        if self.alternate_flag:
+                    if self.alternate_flag:
 
-                            self.call_cv_color_clear()
-                            self.call_post_processing()                            
+                        self.call_cv_color_clear()
+                        self.call_post_processing()
 
-                            if cm_call_저가 != 콜저가리스트:
+                        if cm_call_저가 != 콜저가리스트:
 
-                                콜저가리스트 = copy.deepcopy(cm_call_저가)
-                                self.call_low_update_color_check()
-                            else:
-                                pass
-
-                            if cm_call_고가 != 콜고가리스트:
-
-                                콜고가리스트 = copy.deepcopy(cm_call_고가)
-                                self.call_high_update_color_check()                           
-                            else:
-                                pass
+                            콜저가리스트 = copy.deepcopy(cm_call_저가)
+                            self.call_low_update_color_check()
                         else:
+                            pass
 
-                            self.put_cv_color_clear()
-                            self.put_post_processing()
+                        if cm_call_고가 != 콜고가리스트:
 
-                            if cm_put_저가 != 풋저가리스트:
+                            콜고가리스트 = copy.deepcopy(cm_call_고가)
+                            self.call_high_update_color_check()
+                        else:
+                            pass
+                    else:
 
-                                풋저가리스트 = copy.deepcopy(cm_put_저가)
-                                self.put_low_update_color_check()
-                            else:
-                                pass
+                        self.put_cv_color_clear()
+                        self.put_post_processing()
 
-                            if cm_put_고가 != 풋고가리스트:
+                        if cm_put_저가 != 풋저가리스트:
 
-                                풋고가리스트 = copy.deepcopy(cm_put_고가)
-                                self.put_high_update_color_check()
-                            else:
-                                pass
+                            풋저가리스트 = copy.deepcopy(cm_put_저가)
+                            self.put_low_update_color_check()
+                        else:
+                            pass
 
-                        self.alternate_flag = not self.alternate_flag
+                        if cm_put_고가 != 풋고가리스트:
 
-                        if not overnight:
+                            풋고가리스트 = copy.deepcopy(cm_put_고가)
+                            self.put_high_update_color_check()
+                        else:
+                            pass
 
-                            콜_미결합 = df_cm_call['미결'].sum()
-                            풋_미결합 = df_cm_put['미결'].sum()
+                    self.alternate_flag = not self.alternate_flag
 
-                            미결합 = 콜_미결합 + 풋_미결합
+                    if not overnight:
 
-                            oi_delta_old = oi_delta
+                        콜_미결합 = df_cm_call['미결'].sum()
+                        풋_미결합 = df_cm_put['미결'].sum()
 
-                            if 미결합 > 0:
-                                콜미결퍼센트 = (콜_미결합 / 미결합) * 100
-                                풋미결퍼센트 = 100 - 콜미결퍼센트
-                                #call_oi_delta = 콜미결퍼센트 - call_oi_percent_init_value
-                                #put_oi_delta = 풋미결퍼센트 - put_oi_percent_init_value
-                                call_oi_delta = 콜_미결합 - call_oi_percent_init_value
-                                put_oi_delta = 풋_미결합 - put_oi_percent_init_value
+                        미결합 = 콜_미결합 + 풋_미결합
 
-                                oi_delta = call_oi_delta - put_oi_delta
-                                미결_직전대비.extend([oi_delta - oi_delta_old])
-                                temp = list(미결_직전대비)
-                            else:
-                                pass
+                        oi_delta_old = oi_delta
 
-                            if oi_delta > 0:
+                        if 미결합 > 0:
+                            콜미결퍼센트 = (콜_미결합 / 미결합) * 100
+                            풋미결퍼센트 = 100 - 콜미결퍼센트
+                            # call_oi_delta = 콜미결퍼센트 - call_oi_percent_init_value
+                            # put_oi_delta = 풋미결퍼센트 - put_oi_percent_init_value
+                            call_oi_delta = 콜_미결합 - call_oi_percent_init_value
+                            put_oi_delta = 풋_미결합 - put_oi_percent_init_value
 
-                                self.label_atm.setStyleSheet('background-color: red; color: white')
-                                self.label_atm.setFont(QtGui.QFont("Consolas", 9, QtGui.QFont.Bold))
+                            oi_delta = call_oi_delta - put_oi_delta
+                            미결_직전대비.extend([oi_delta - oi_delta_old])
+                            temp = list(미결_직전대비)
+                        else:
+                            pass
 
-                                if min(temp) > 0:
+                        if oi_delta > 0:
 
-                                    str = '[{0:0.2f}] [{1:0.2f}/{2:0.2f}] [{3}:{4}] ↗'.format(
-                                        fut_realdata['현재가'] - fut_realdata['KP200'],
-                                        call_atm_value + put_atm_value,
-                                        abs(call_atm_value - put_atm_value),
-                                        format(call_oi_delta, ','), format(put_oi_delta, ','))
-                                elif max(temp) < 0:
+                            self.label_atm.setStyleSheet('background-color: red; color: white')
+                            self.label_atm.setFont(QtGui.QFont("Consolas", 9, QtGui.QFont.Bold))
 
-                                    str = '[{0:0.2f}] [{1:0.2f}/{2:0.2f}] [{3}:{4}] ↘'.format(
-                                        fut_realdata['현재가'] - fut_realdata['KP200'],
-                                        call_atm_value + put_atm_value,
-                                        abs(call_atm_value - put_atm_value),
-                                        format(call_oi_delta, ','), format(put_oi_delta, ','))
-                                else:
+                            if min(temp) > 0:
 
-                                    str = '[{0:0.2f}] [{1:0.2f}/{2:0.2f}] [{3}:{4}]'.format(
-                                        fut_realdata['현재가'] - fut_realdata['KP200'],
-                                        call_atm_value + put_atm_value,
-                                        abs(call_atm_value - put_atm_value),
-                                        format(call_oi_delta, ','), format(put_oi_delta, ','))
-
-                            elif oi_delta < 0:
-
-                                self.label_atm.setStyleSheet('background-color: blue; color: white')
-                                self.label_atm.setFont(QtGui.QFont("Consolas", 9, QtGui.QFont.Bold))
-
-                                if min(temp) > 0:
-
-                                    str = '[{0:0.2f}] [{1:0.2f}/{2:0.2f}] [{3}:{4}] ↘'.format(
-                                        fut_realdata['현재가'] - fut_realdata['KP200'],
-                                        call_atm_value + put_atm_value,
-                                        abs(call_atm_value - put_atm_value),
-                                        format(call_oi_delta, ','), format(put_oi_delta, ','))
-                                elif max(temp) < 0:
-
-                                    str = '[{0:0.2f}] [{1:0.2f}/{2:0.2f}] [{3}:{4}] ↗'.format(
-                                        fut_realdata['현재가'] - fut_realdata['KP200'],
-                                        call_atm_value + put_atm_value,
-                                        abs(call_atm_value - put_atm_value),
-                                        format(call_oi_delta, ','), format(put_oi_delta, ','))
-                                else:
-
-                                    str = '[{0:0.2f}] [{1:0.2f}/{2:0.2f}] [{3}:{4}]'.format(
-                                        fut_realdata['현재가'] - fut_realdata['KP200'],
-                                        call_atm_value + put_atm_value,
-                                        abs(call_atm_value - put_atm_value),
-                                        format(call_oi_delta, ','), format(put_oi_delta, ','))
-
-                            else:
-                                self.label_atm.setStyleSheet('background-color: yellow; color: black')
-                                self.label_atm.setFont(QtGui.QFont("Consolas", 9, QtGui.QFont.Bold))
-
-                                str = '[{0:0.2f}] [{1:0.2f}/{2:0.2f}] [{3:0.1f}:{4:0.1f}]'.format(
+                                str = '[{0:0.2f}] [{1:0.2f}/{2:0.2f}] [{3}:{4}] ↗'.format(
                                     fut_realdata['현재가'] - fut_realdata['KP200'],
                                     call_atm_value + put_atm_value,
                                     abs(call_atm_value - put_atm_value),
-                                    콜미결퍼센트, 풋미결퍼센트)
+                                    format(call_oi_delta, ','), format(put_oi_delta, ','))
+                            elif max(temp) < 0:
+
+                                str = '[{0:0.2f}] [{1:0.2f}/{2:0.2f}] [{3}:{4}] ↘'.format(
+                                    fut_realdata['현재가'] - fut_realdata['KP200'],
+                                    call_atm_value + put_atm_value,
+                                    abs(call_atm_value - put_atm_value),
+                                    format(call_oi_delta, ','), format(put_oi_delta, ','))
+                            else:
+
+                                str = '[{0:0.2f}] [{1:0.2f}/{2:0.2f}] [{3}:{4}]'.format(
+                                    fut_realdata['현재가'] - fut_realdata['KP200'],
+                                    call_atm_value + put_atm_value,
+                                    abs(call_atm_value - put_atm_value),
+                                    format(call_oi_delta, ','), format(put_oi_delta, ','))
+
+                        elif oi_delta < 0:
+
+                            self.label_atm.setStyleSheet('background-color: blue; color: white')
+                            self.label_atm.setFont(QtGui.QFont("Consolas", 9, QtGui.QFont.Bold))
+
+                            if min(temp) > 0:
+
+                                str = '[{0:0.2f}] [{1:0.2f}/{2:0.2f}] [{3}:{4}] ↘'.format(
+                                    fut_realdata['현재가'] - fut_realdata['KP200'],
+                                    call_atm_value + put_atm_value,
+                                    abs(call_atm_value - put_atm_value),
+                                    format(call_oi_delta, ','), format(put_oi_delta, ','))
+                            elif max(temp) < 0:
+
+                                str = '[{0:0.2f}] [{1:0.2f}/{2:0.2f}] [{3}:{4}] ↗'.format(
+                                    fut_realdata['현재가'] - fut_realdata['KP200'],
+                                    call_atm_value + put_atm_value,
+                                    abs(call_atm_value - put_atm_value),
+                                    format(call_oi_delta, ','), format(put_oi_delta, ','))
+                            else:
+
+                                str = '[{0:0.2f}] [{1:0.2f}/{2:0.2f}] [{3}:{4}]'.format(
+                                    fut_realdata['현재가'] - fut_realdata['KP200'],
+                                    call_atm_value + put_atm_value,
+                                    abs(call_atm_value - put_atm_value),
+                                    format(call_oi_delta, ','), format(put_oi_delta, ','))
 
                         else:
-                            str = '[{0:0.2f}] [{1:0.2f}/{2:0.2f}] [{3}:{4}]'.format(
+                            self.label_atm.setStyleSheet('background-color: yellow; color: black')
+                            self.label_atm.setFont(QtGui.QFont("Consolas", 9, QtGui.QFont.Bold))
+
+                            str = '[{0:0.2f}] [{1:0.2f}/{2:0.2f}] [{3:0.1f}:{4:0.1f}]'.format(
                                 fut_realdata['현재가'] - fut_realdata['KP200'],
                                 call_atm_value + put_atm_value,
                                 abs(call_atm_value - put_atm_value),
-                                '-', '-')
+                                콜미결퍼센트, 풋미결퍼센트)
 
-                        self.label_atm.setText(str)
+                    else:
+                        str = '[{0:0.2f}] [{1:0.2f}/{2:0.2f}] [{3}:{4}]'.format(
+                            fut_realdata['현재가'] - fut_realdata['KP200'],
+                            call_atm_value + put_atm_value,
+                            abs(call_atm_value - put_atm_value),
+                            '-', '-')
 
-                        if dt.second in every_0sec and not self.alternate_flag:
+                    self.label_atm.setText(str)
 
-                            self.call_db_check()
-                            self.put_db_check()
-                        else:
-                            pass
+                    if dt.second in every_0sec and not self.alternate_flag:
 
-                        if dt.minute in every_5min and dt.second in only_30sec and self.alternate_flag:
+                        self.call_db_check()
+                        self.put_db_check()
+                    else:
+                        pass
 
-                            self.call_open_check()
-                            self.put_open_check()
-                        else:
-                            pass
+                    if dt.minute in every_5min and dt.second in only_30sec and self.alternate_flag:
+
+                        self.call_open_check()
+                        self.put_open_check()
                     else:
                         pass
                 else:
