@@ -15,15 +15,15 @@ import pickle
 # from subprocess import Popen
 import webbrowser
 
-# import PyQt5
-from PyQt5.QtCore import Qt
 from PyQt5 import QtCore, QtGui, uic
-# from PyQt5 import QAxContainer
-from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QMessageBox
-from PyQt5.QtGui import QColor
+
+# from PyQt5.QtCore import Qt, QAbstractTableModel, QModelIndex, QThread, QTimer
+# from PyQt5.QtGui import QBrush, QColor, QFont, QIcon, QPixmap
+# from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QMessageBox
+# from PyQt5 import QAxContainer
 # from PyQt5.QAxContainer import *
 # from PyQt5.QtTest import QTest
 
@@ -32,7 +32,7 @@ from numpy import NaN
 
 import pandas as pd
 import pandas.io.sql as pdsql
-from pandas import DataFrame
+from pandas import DataFrame, Series
 
 import sqlite3
 import logging
@@ -64,7 +64,7 @@ import win32gui
 import copy
 
 프로그램정보 = [
-    ['프로그램명', 'mymoneybot-eBEST'], 
+    ['프로그램명', 'mymoneybot-eBEST'],
     ['Version', '1.4'],
     ['개발일', '2018-02-28'],
     ['2018-06-04', '포트폴리오 더블클릭으로 삭제 기능 추가'],
@@ -3103,13 +3103,13 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                 if call_volume_total > put_volume_total and call_volume_total > 0 and put_volume_total < 0:
                     self.label_msg.setStyleSheet('background-color: red; color: white')
-                    self.label_msg.setFont(QtGui.QFont("Consolas", 9, QtGui.QFont.Bold))
+                    self.label_msg.setFont(QFont("Consolas", 9, QFont.Bold))
                 elif call_volume_total < put_volume_total and call_volume_total < 0 and put_volume_total > 0:
                     self.label_msg.setStyleSheet('background-color: blue; color: white')
-                    self.label_msg.setFont(QtGui.QFont("Consolas", 9, QtGui.QFont.Bold))
+                    self.label_msg.setFont(QFont("Consolas", 9, QFont.Bold))
                 else:
                     self.label_msg.setStyleSheet('background-color: lime; color: blue')
-                    self.label_msg.setFont(QtGui.QFont("Consolas", 9, QtGui.QFont.Bold))                
+                    self.label_msg.setFont(QFont("Consolas", 9, QFont.Bold))                
 
                 if ReceiveRealData:
 
@@ -3231,7 +3231,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                         if oi_delta > 0:
 
                             self.label_atm.setStyleSheet('background-color: red; color: white')
-                            self.label_atm.setFont(QtGui.QFont("Consolas", 9, QtGui.QFont.Bold))
+                            self.label_atm.setFont(QFont("Consolas", 9, QFont.Bold))
 
                             if min(temp) > 0:
 
@@ -3258,7 +3258,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                         elif oi_delta < 0:
 
                             self.label_atm.setStyleSheet('background-color: blue; color: white')
-                            self.label_atm.setFont(QtGui.QFont("Consolas", 9, QtGui.QFont.Bold))
+                            self.label_atm.setFont(QFont("Consolas", 9, QFont.Bold))
 
                             if min(temp) > 0:
 
@@ -3284,7 +3284,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                         else:
                             self.label_atm.setStyleSheet('background-color: yellow; color: black')
-                            self.label_atm.setFont(QtGui.QFont("Consolas", 9, QtGui.QFont.Bold))
+                            self.label_atm.setFont(QFont("Consolas", 9, QFont.Bold))
 
                             str = '[{0:0.2f}] [{1:0.2f}/{2:0.2f}] [{3:0.1f}:{4:0.1f}]'.format(
                                 fut_realdata['현재가'] - fut_realdata['KP200'],
@@ -3320,7 +3320,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     self.label_msg.setText(str)
             else:
                 self.label_msg.setStyleSheet('background-color: lime; color: blue')
-                self.label_msg.setFont(QtGui.QFont("Consolas", 9, QtGui.QFont.Bold))
+                self.label_msg.setFont(QFont("Consolas", 9, QFont.Bold))
 
                 str = '{0:02d}:{1:02d}:{2:02d}'.format(delta_hour, delta_minute, delta_sec)
                 self.label_msg.setText(str)
@@ -14863,7 +14863,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         menu = self.menubar.addMenu('&플러그인로봇')
         for item in menuitems:
             icon = QIcon()
-            icon.addPixmap(QtGui.QPixmap("PNG/approval.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+            icon.addPixmap(QPixmap("PNG/approval.png"), QIcon.Normal, QIcon.Off)
             entry = menu.addAction(icon, item)
             entry.setObjectName(item)
 
