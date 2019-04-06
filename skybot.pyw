@@ -3147,7 +3147,11 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     else:
                         pass
 
-                    if not pre_start:
+                    if not pre_start:                        
+                    
+                        # 체결량 갱신
+                        self.call_che_display()
+                        self.put_che_display()
 
                         global 콜저가리스트, 콜고가리스트, 풋저가리스트, 풋고가리스트
 
@@ -3312,10 +3316,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 str = '{0:02d}:{1:02d}:{2:02d}'.format(delta_hour, delta_minute, delta_sec)
                 self.label_msg.setText(str)
 
-            # 호가, 체결량 갱신
+            # 호가 갱신
             self.quote_display()
-            self.call_che_display()
-            self.put_che_display()
 
             # 4종의 그래프데이타를 받아옴
             global selected_call, selected_put
