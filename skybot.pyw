@@ -3102,16 +3102,15 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     self.label_msg.setFont(QtGui.QFont("Consolas", 9, QtGui.QFont.Bold))
                 else:
                     self.label_msg.setStyleSheet('background-color: lime; color: blue')
-                    self.label_msg.setFont(QtGui.QFont("Consolas", 9, QtGui.QFont.Bold))
-
-                volume_delta_old = volume_delta
-
-                volume_delta = call_volume_total - put_volume_total
-
-                거래량_직전대비.extend([volume_delta - volume_delta_old])
-                temp = list(거래량_직전대비)
+                    self.label_msg.setFont(QtGui.QFont("Consolas", 9, QtGui.QFont.Bold))                
 
                 if ReceiveRealData:
+
+                    volume_delta_old = volume_delta
+                    volume_delta = call_volume_total - put_volume_total
+
+                    거래량_직전대비.extend([volume_delta - volume_delta_old])
+                    temp = list(거래량_직전대비)
 
                     if volume_delta > 0:
 
