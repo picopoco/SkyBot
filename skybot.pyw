@@ -3241,7 +3241,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                         if self.alternate_flag:
 
-                            self.call_color_clear()
+                            self.call_cv_color_clear()
                             self.call_post_processing()                            
 
                             if cm_call_저가 != 콜저가리스트:
@@ -3261,7 +3261,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                                 pass
                         else:
 
-                            self.put_color_clear()
+                            self.put_cv_color_clear()
                             self.put_post_processing()
 
                             if cm_put_저가 != 풋저가리스트:
@@ -4074,7 +4074,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             print('put_db_percent_local is empty...')
 
     # Call 컬러처리
-    def call_color_clear(self):
+    def call_cv_color_clear(self):
 
         if call_scroll_end_position <= nCount_cm_option_pairs:
 
@@ -5676,7 +5676,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
         self.textBrowser.append(str)				
 
     # Put 컬러처리
-    def put_color_clear(self):
+    def put_cv_color_clear(self):
 
         if put_scroll_end_position <= nCount_cm_option_pairs:
 
