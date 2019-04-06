@@ -3594,7 +3594,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
         global df_cm_call, call_open, call_ol, call_oh
         global call_gap_percent
-        global cm_call_시가_extend, cm_call_피봇_extend
+        global cm_call_시가, cm_call_시가_extend, cm_call_피봇, cm_call_피봇_extend
 
         call_open_count = 0
 
@@ -3805,7 +3805,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
         global df_cm_put, put_open, put_ol, put_oh
         global put_gap_percent
-        global cm_put_시가_extend, cm_put_피봇_extend
+        global cm_put_시가, cm_put_시가_extend, cm_put_피봇, cm_put_피봇_extend
 
         put_open_count = 0
 
