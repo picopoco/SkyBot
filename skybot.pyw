@@ -3087,10 +3087,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             else:
                 delta_sec = dt.second
                 delta_minute = dt.minute
-                delta_hour = dt.hour
-           
-            global volume_delta, volume_delta_old, oi_delta, oi_delta_old
-            global 거래량_직전대비, 미결_직전대비
+                delta_hour = dt.hour            
 
             if not pre_start:
 
@@ -3105,6 +3102,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     self.label_msg.setFont(QtGui.QFont("Consolas", 9, QtGui.QFont.Bold))                
 
                 if ReceiveRealData:
+
+                    global volume_delta, volume_delta_old, oi_delta, oi_delta_old
+                    global 거래량_직전대비, 미결_직전대비
 
                     volume_delta_old = volume_delta
                     volume_delta = call_volume_total - put_volume_total
@@ -8039,7 +8039,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     df_plotdata_cm_put_oi[0][0] = 0
                     #df_plotdata_cm_oi_cha.iloc[0][0] = 0
 
-                    str = '[{0:02d}:{1:02d}:{2:02d}] Call OI 시작값 : {3}, Put OI 시작값 : {4}\r'.format(dt.hour,
+                    str = '[{0:02d}:{1:02d}:{2:02d}] Call/Put OI 초기값 : {3}/{4}\r'.format(dt.hour,
                                             dt.minute, dt.second, format(call_oi_percent_init_value, ','),
                                             format(put_oi_percent_init_value, ','))
                     self.textBrowser.append(str)
