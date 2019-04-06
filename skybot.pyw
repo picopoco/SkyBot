@@ -3319,10 +3319,11 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                             pass
 
                         if dt.minute in every_5min and dt.second in only_30sec and self.alternate_flag:
-
+                            '''
                             str = '[{0:02d}:{1:02d}:{2:02d}] Open Check 갱신합니다.\r'.format(delta_hour, delta_minute,
                                                                                          delta_sec)
-
+                            self.textBrowser.append(str)
+                            '''
                             self.call_open_check()
                             self.put_open_check()
                         else:
@@ -3728,8 +3729,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
         if call_gap_percent_local:
             tmp = np.array(call_gap_percent_local)
+            sum = round(df_cm_call['시가갭'].sum(), 2)
             mean = int(round(np.mean(tmp), 1))
-            call_str = '시가갭' + '(' + repr(mean) + '%' + ')'
+            call_str = repr(sum) + '(' + repr(mean) + '%' + ')'
 
             if call_str != self.tableWidget_call.horizontalHeaderItem(Option_column.시가갭.value).text():
                 item = QTableWidgetItem(call_str)
@@ -3745,6 +3747,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 self.tableWidget_call.setColumnWidth(0, 15)
             else:
                 pass
+
+            str = '[{0:02d}:{1:02d}:{2:02d}] Call 시가갭 갱신합니다.\r'.format(delta_hour, delta_minute, delta_sec)
+            self.textBrowser.append(str)
         else:
             print('call_gap_percent_local is empty...')
 
@@ -3779,7 +3784,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
         if call_db_percent_local:
             tmp = np.array(call_db_percent_local)
-            sum = df_cm_call['대비'].sum() 
+            sum = df_cm_call['대비'].sum()
             mean = int(round(np.mean(tmp), 1))
             call_str = repr(sum) + '(' + repr(mean) + '%' + ')'
 
@@ -3935,8 +3940,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
         if put_gap_percent_local:
             tmp = np.array(put_gap_percent_local)
+            sum = round(df_cm_put['시가갭'].sum(), 2)
             mean = int(round(np.mean(tmp), 1))
-            put_str = '시가갭' + '(' + repr(mean) + '%' + ')'
+            put_str = repr(sum) + '(' + repr(mean) + '%' + ')'
 
             if put_str != self.tableWidget_put.horizontalHeaderItem(Option_column.시가갭.value).text():
                 item = QTableWidgetItem(put_str)
@@ -3952,6 +3958,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 self.tableWidget_put.setColumnWidth(0, 15)
             else:
                 pass
+
+            str = '[{0:02d}:{1:02d}:{2:02d}] Put 시가갭 갱신합니다.\r'.format(delta_hour, delta_minute, delta_sec)
+            self.textBrowser.append(str)
         else:
             print('put_gap_percent_local is empty...')
 
@@ -11697,6 +11706,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                                 if result['예상체결가격'] > 0.3 and df_cm_call.iloc[index]['종가'] > 0:
 
                                     시가갭 = result['예상체결가격'] - df_cm_call.iloc[index]['종가']
+                                    df_cm_call.loc[index, '시가갭'] = 시가갭
+
                                     yoc_call_gap_percent[index] = (result['예상체결가격'] / df_cm_call.iloc[index][
                                         '종가'] - 1) * 100
 
@@ -11733,8 +11744,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                         if call_gap_percent_local:
                             tmp = np.array(call_gap_percent_local)
+                            sum = round(df_cm_call['시가갭'].sum(), 2)
                             mean = int(round(np.mean(tmp), 1))
-                            call_str = '시가갭' + '(' + repr(mean) + '%' + ')'
+                            call_str = repr(sum) + '(' + repr(mean) + '%' + ')'
 
                             if call_str != self.tableWidget_call.horizontalHeaderItem(Option_column.시가갭.value).text():
                                 item = QTableWidgetItem(call_str)
@@ -11783,6 +11795,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                                 if result['예상체결가격'] > 0.3 and df_cm_put.iloc[index]['종가'] > 0:
 
                                     시가갭 = result['예상체결가격'] - df_cm_put.iloc[index]['종가']
+                                    df_cm_put.loc[index, '시가갭'] = 시가갭
+
                                     yoc_put_gap_percent[index] = (result['예상체결가격'] / df_cm_put.iloc[index][
                                         '종가'] - 1) * 100
 
@@ -11819,8 +11833,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                         if put_gap_percent_local:
                             tmp = np.array(put_gap_percent_local)
+                            sum = round(df_cm_put['시가갭'].sum(), 2)
                             mean = int(round(np.mean(tmp), 1))
-                            put_str = '시가갭' + '(' + repr(mean) + '%' + ')'
+                            put_str = repr(sum) + '(' + repr(mean) + '%' + ')'
 
                             if put_str != self.tableWidget_put.horizontalHeaderItem(Option_column.시가갭.value).text():
                                 item = QTableWidgetItem(put_str)
