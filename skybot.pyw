@@ -2174,6 +2174,7 @@ class t8416_NM_Put_Worker(QThread):
 Ui_당월물옵션전광판, QtBaseClass_당월물옵션전광판 = uic.loadUiType(UI_DIR+"당월물옵션전광판.ui")
 
 class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
+
     def __init__(self, parent=None):
         super(화면_당월물옵션전광판, self).\
             __init__(parent, flags=Qt.WindowMinimizeButtonHint | Qt.WindowMaximizeButtonHint | Qt.WindowCloseButtonHint)
@@ -2186,10 +2187,10 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
         self.setWindowTitle(cm_option_title)
 
         self.parent = parent
-
-        #self.timer = QTimer(self)
-        #self.timer.timeout.connect(self.timeout)
         '''
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.timeout)
+
         self.t8415_callworker = t8415_Call_Worker()
         self.t8415_callworker.finished.connect(self.t8415_call_request)
 
@@ -2289,7 +2290,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
         self.Plot_Fut.enableAutoRange('y', True)
         self.Plot_Fut.plotItem.showGrid(True, True, 0.5)
-        self.Plot_Fut.setRange(xRange=[0, 395 + 1], padding=0)
+        self.Plot_Fut.setRange(xRange=[0, 395 + 1], yRange=[-100, 100], padding=0)
 
         global time_line_fut, fut_curve, kp200_curve
         global fut_jl_line, fut_jh_line, fut_pivot_line, volume_base_line
@@ -2324,7 +2325,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
         self.Plot_Opt.enableAutoRange('y', True)
         self.Plot_Opt.plotItem.showGrid(True, True, 0.5)
-        self.Plot_Opt.setRange(xRange=[0, 395 + 1], padding=0)
+        self.Plot_Opt.setRange(xRange=[0, 395 + 1], yRange=[-100, 100], padding=0)
 
         global time_line_opt, mv_line, call_curve, put_curve
 
@@ -2499,12 +2500,6 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
         self.tableWidget_call.verticalScrollBar().valueChanged.connect(self._calltable_vertical_scroll_position)
         self.tableWidget_put.verticalScrollBar().valueChanged.connect(self._puttable_vertical_scroll_position)
 
-        # QuoteView 시그날/슬롯
-        #self.checkBox_quoteview.stateChanged.connect(self.quoteview_state_changed)
-
-        # 지수실시간 요청 시그날/슬롯
-        #self.checkBox_vplot.stateChanged.connect(self.vplot_state_changed)
-
         self.IJ = IJ_(parent=self)
         self.S3 = S3_(parent=self)
         self.BM = BM_(parent=self)
@@ -2651,7 +2646,6 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
         txt = self.comboBox2.currentText()
         comboindex2 = self.comboBox2.currentIndex()
-        print('comboindex2', comboindex2)  
 
         if comboindex2 == 0:
 
@@ -2663,6 +2657,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             cm_call_oi_right_curve.clear()
             cm_put_oi_right_curve.clear()
 
+            #self.Plot_Opt.setRange(yRange=[-100, 100], padding=0)
+
         elif comboindex2 == 1:
 
             for i in range(9):
@@ -2673,12 +2669,23 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             cm_call_volume_right_curve.clear()
             cm_put_volume_right_curve.clear()
 
+            #self.Plot_Opt.setRange(yRange=[-100, 100], padding=0)
+
         else:                      
             cm_call_volume_right_curve.clear()
             cm_put_volume_right_curve.clear()
 
             cm_call_oi_right_curve.clear()
             cm_put_oi_right_curve.clear()
+
+            self.Plot_Opt.setRange(yRange=[0, 6], padding=0)
+
+            mv_line[0].setValue(1.2)
+            mv_line[1].setValue(2.5)
+            mv_line[2].setValue(3.5)
+            mv_line[3].setValue(4.85)
+            mv_line[4].setValue(5.1)
+            mv_line[5].setValue(5.5) 
 
     def timeout(self):
         dt = datetime.datetime.now()
@@ -2698,30 +2705,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
         else:
             stylesheet = "background-color: {0}; color: {1}".format(color1, color2)
             widget.setStyleSheet(stylesheet)
-    '''
-    @pyqtSlot(int)
-    def quoteview_state_changed(self):
 
-        if self.checkBox_quoteview.isChecked():
-
-            self.tableWidget_quote.setHorizontalHeaderLabels(['C-MSC', 'C-MDC', 'C-MSR',
-                                                        'C-MDR', 'P-MSC', 'P-MDC', 'P-MSR', 'P-MDR', '콜건수비',
-                                                        '콜잔량비', '풋건수비', '풋잔량비', '호가 ∑(CRΔ/RRΔ)'])
-
-            # 구 호가요청 취소
-            for i in range(15):
-                self.cm_opt_ho.UnadviseRealDataWithKey(cm_call_code[(old_atm_index - 7) + i])
-                self.cm_opt_ho.UnadviseRealDataWithKey(cm_put_code[(old_atm_index - 7) + i])
-
-            # 새 호가요청
-            for i in range(15):
-                self.cm_opt_ho.AdviseRealData(cm_call_code[(atm_index - 7) + i])
-                self.cm_opt_ho.AdviseRealData(cm_put_code[(atm_index - 7) + i])
-        else:
-            self.tableWidget_quote.setHorizontalHeaderLabels(['C-MSCC', 'C-MDCC', 'C-MSCR', 'C-MDCR',
-                                                              'P-MSCC', 'P-MDCC', 'P-MSCR', 'P-MDCR', '콜건수비',
-                                                        '콜잔량비', '풋건수비', '풋잔량비', '호가 ∑(CRΔ/RRΔ)'])            
-    '''
     @pyqtSlot(int)
     def _call_horizontal_header_clicked(self, idx):
 
@@ -3100,11 +3084,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 delta_sec = dt.second
                 delta_minute = dt.minute
                 delta_hour = dt.hour
-
-            global call_volume_total, put_volume_total
+           
             global volume_delta, volume_delta_old, oi_delta, oi_delta_old
             global 거래량_직전대비, 미결_직전대비
-            #global df_plotdata_cm_call_volume, df_plotdata_cm_put_volume, df_plotdata_cm_volume_cha
 
             if not pre_start:
 
@@ -3177,7 +3159,6 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                             if cm_call_저가 != 콜저가리스트:
 
                                 콜저가리스트 = copy.deepcopy(cm_call_저가)
-                                #self.callnode_color_check()
                                 self.call_low_update_color_check()
                             else:
                                 pass
@@ -3185,7 +3166,6 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                             if cm_call_고가 != 콜고가리스트:
 
                                 콜고가리스트 = copy.deepcopy(cm_call_고가)
-                                #self.callnode_color_check()
                                 self.call_high_update_color_check()                           
                             else:
                                 pass
@@ -3197,7 +3177,6 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                             if cm_put_저가 != 풋저가리스트:
 
                                 풋저가리스트 = copy.deepcopy(cm_put_저가)
-                                #self.putnode_color_check()
                                 self.put_low_update_color_check()
                             else:
                                 pass
@@ -3205,7 +3184,6 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                             if cm_put_고가 != 풋고가리스트:
 
                                 풋고가리스트 = copy.deepcopy(cm_put_고가)
-                                #self.putnode_color_check()
                                 self.put_high_update_color_check()
                             else:
                                 pass
@@ -3310,20 +3288,13 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                         if dt.second in every_0sec and not self.alternate_flag:
 
-                            #str = '[{0:02d}:{1:02d}:{2:02d}] 대비 갱신합니다.\r'.format(delta_hour, delta_minute, delta_sec)
-                            #self.textBrowser.append(str)
-
                             self.call_db_check()
                             self.put_db_check()
                         else:
                             pass
 
                         if dt.minute in every_5min and dt.second in only_30sec and self.alternate_flag:
-                            '''
-                            str = '[{0:02d}:{1:02d}:{2:02d}] Open Check 갱신합니다.\r'.format(delta_hour, delta_minute,
-                                                                                         delta_sec)
-                            self.textBrowser.append(str)
-                            '''
+
                             self.call_open_check()
                             self.put_open_check()
                         else:
@@ -3341,7 +3312,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 str = '{0:02d}:{1:02d}:{2:02d}'.format(delta_hour, delta_minute, delta_sec)
                 self.label_msg.setText(str)
 
-            # 호가갱신
+            # 호가, 체결량 갱신
             self.quote_display()
             self.call_che_display()
             self.put_che_display()
@@ -3380,62 +3351,28 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             if comboindex2 == 2:
 
                 # 옵션 Y축 최대값 구하기
-                #axY = self.Plot_Opt.getAxis('left')
+                axY = self.Plot_Opt.getAxis('left')
                 #print('옵션 y axis range: {}'.format(axY.range[1]))
 
-                mv_line[0].setValue(1.2)
-                mv_line[1].setValue(2.5)
-                mv_line[2].setValue(3.5)
-                mv_line[3].setValue(4.85)
-                mv_line[4].setValue(5.1)
-                mv_line[5].setValue(5.5)
-                '''
-                if 5.1 < axY.range[1] < 5.5:
-                    mv_line[4].setValue(5.1)
-                    mv_line[5].setValue(0)
-                    mv_line[6].setValue(0)
-                    mv_line[7].setValue(0)
-                    mv_line[8].setValue(0)
-                elif 5.5 <= axY.range[1] < 6.0:
-                    mv_line[4].setValue(5.1)
-                    mv_line[5].setValue(5.5)
-                    mv_line[6].setValue(0)
-                    mv_line[7].setValue(0)
-                    mv_line[8].setValue(0)
-                elif 6.0 <= axY.range[1] < 7.1:
-                    mv_line[4].setValue(5.1)
-                    mv_line[5].setValue(5.5)
+                if 6.0 <= axY.range[1] < 7.1:
                     mv_line[6].setValue(6.85)
                     mv_line[7].setValue(0)
                     mv_line[8].setValue(0)
                 elif 7.1 <= axY.range[1] < 8.1:
-                    mv_line[4].setValue(5.1)
-                    mv_line[5].setValue(5.5)
                     mv_line[6].setValue(6.85)
                     mv_line[7].setValue(7.1)
                     mv_line[8].setValue(0)
                 elif axY.range[1] >= 8.1:
-                    mv_line[4].setValue(5.1)
-                    mv_line[5].setValue(5.5)
                     mv_line[6].setValue(6.85)
                     mv_line[7].setValue(7.1)
                     mv_line[8].setValue(8.1)
                 else:
-                    pass
-                '''
+                    pass                
             else:
                 pass
                                    
             if comboindex2 == 2:
-                '''
-                # clear all view tablewidget curve
-                dummy = [np.nan] * (opt_x_idx + 1)
-                dummy[0] = 0
-
-                for i in range(9):
-                    call_curve[i].setData(dummy)
-                    put_curve[i].setData(dummy)
-                '''
+                
                 for i in range(9):
                     call_curve[i].clear()
                     put_curve[i].clear()
@@ -3485,7 +3422,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 curve3_data = infos[4]
                 curve4_data = infos[5]
             
-            # 오른쪽 그래프 선택
+            # 오른쪽 그래프 선택 및 그리기
             if comboindex2 == 0:
 
                 cm_call_volume_right_curve.setData(curve3_data)
@@ -3498,7 +3435,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             else:
                 pass
             
-            # 왼쪽 그래프 선택
+            # 왼쪽 그래프 선택 및 그리기
             if comboindex1 == 0:
 
                 cm_call_oi_curve.setData(curve1_data)
@@ -3512,8 +3449,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 kp200_curve.setData(curve1_data)
                 fut_curve.setData(curve2_data)            
 
-            str = '[{0:02d}:{1:02d}:{2:02d}] plot update 처리시간 ----------> {3:0.2f} ms...'.format(delta_hour, delta_minute, delta_sec, (timeit.default_timer() - start_time) * 1000)
-            print(str)
+            str = '[{0:02d}:{1:02d}:{2:02d}] Plot Update 처리시간 : {3:0.2f} ms...'.format(delta_hour, delta_minute, delta_sec, (timeit.default_timer() - start_time) * 1000)
+            #print(str)
+            self.textBrowser.append(str)
         except:
             pass
 
@@ -3755,6 +3693,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
     def call_db_check(self):
 
+        global df_cm_call, call_db_percent
+
         for index in range(nCount_cm_option_pairs):
 
             if df_cm_call.iloc[index]['시가'] > 0.3 and df_cm_call.iloc[index]['저가'] < df_cm_call.iloc[index]['고가']:
@@ -3965,6 +3905,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             print('put_gap_percent_local is empty...')
 
     def put_db_check(self):
+
+        global df_cm_put, put_db_percent
 
         for index in range(nCount_cm_option_pairs):
 
@@ -8335,7 +8277,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     self.callnode_color_check()
                     self.putnode_color_check()
 
-                    str = '[{0:02d}:{1:02d}:{2:02d}] 주간옵션 전광판을 갱신합니다.\r'.format(dt.hour, dt.minute, dt.second)
+                    str = '[{0:02d}:{1:02d}:{2:02d}] 옵션 전광판을 갱신합니다.\r'.format(dt.hour, dt.minute, dt.second)
                     self.textBrowser.append(str)
                 else:
                     # EUREX 야간옵션 시세전광판
@@ -9159,7 +9101,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             self.callnode_color_check()
             self.putnode_color_check()
             
-            str = '[{0:02d}:{1:02d}:{2:02d}] 야간옵션 전광판을 갱신합니다.\r'.format(dt.hour, dt.minute, dt.second)
+            str = '[{0:02d}:{1:02d}:{2:02d}] 옵션 전광판을 갱신합니다.\r'.format(dt.hour, dt.minute, dt.second)
             self.textBrowser.append(str)
 
             if not refresh_flag:
