@@ -2300,7 +2300,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
         self.Plot_Fut.enableAutoRange('y', True)
         self.Plot_Fut.plotItem.showGrid(True, True, 0.5)
-        self.Plot_Fut.setRange(xRange=[0, 395 + 1], yRange=[-100, 100], padding=0)
+        #self.Plot_Fut.setRange(xRange=[0, 395 + 1], yRange=[-100, 100], padding=0)
+        self.Plot_Fut.setRange(xRange=[0, 395 + 1], padding=0)
 
         global time_line_fut, fut_curve, kp200_curve
         global fut_jl_line, fut_jh_line, fut_pivot_line, volume_base_line
@@ -2335,7 +2336,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
         self.Plot_Opt.enableAutoRange('y', True)
         self.Plot_Opt.plotItem.showGrid(True, True, 0.5)
-        self.Plot_Opt.setRange(xRange=[0, 395 + 1], yRange=[-100, 100], padding=0)
+        #self.Plot_Opt.setRange(xRange=[0, 395 + 1], yRange=[-100, 100], padding=0)
+        self.Plot_Opt.setRange(xRange=[0, 395 + 1], padding=0)
 
         global time_line_opt, mv_line, call_curve, put_curve
 
@@ -2546,16 +2548,16 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
         if comboindex1 == 0:
             
-            fut_jl_line.setValue(0)
-            fut_jh_line.setValue(0)
-            fut_pivot_line.setValue(0)
-            volume_base_line.setValue(0)
-
             kp200_curve.clear()
             fut_curve.clear()
 
             cm_call_volume_curve.clear()
             cm_put_volume_curve.clear()
+            
+            fut_jl_line.setValue(0)
+            fut_jh_line.setValue(0)
+            fut_pivot_line.setValue(0)
+            volume_base_line.setValue(0)
 
             for i in range(nCount_cm_option_pairs):
                 temp = format(df_cm_call.iloc[i]['미결'], ',')
@@ -2575,16 +2577,16 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
         elif comboindex1 == 1:
 
-            fut_jl_line.setValue(0)
-            fut_jh_line.setValue(0)
-            fut_pivot_line.setValue(0)
-            volume_base_line.setValue(0)
-
             kp200_curve.clear()
             fut_curve.clear()
 
             cm_call_oi_curve.clear()
             cm_put_oi_curve.clear()
+            
+            fut_jl_line.setValue(0)
+            fut_jh_line.setValue(0)
+            fut_pivot_line.setValue(0)
+            volume_base_line.setValue(0)
 
             for i in range(nCount_cm_option_pairs):
                 temp = format(df_cm_call.iloc[i]['수정거래량'], ',')
@@ -2602,18 +2604,18 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             call_temp = format(df_cm_call['수정거래량'].sum(), ',')
             put_temp = format(df_cm_put['수정거래량'].sum(), ',')
 
-        else: 
-
-            fut_jl_line.setValue(fut_realdata['전저'])
-            fut_jh_line.setValue(fut_realdata['전고'])
-            volume_base_line.setValue(fut_realdata['피봇'])
-            fut_pivot_line.setValue(fut_realdata['피봇'])           
+        else:
 
             cm_call_volume_curve.clear()
             cm_put_volume_curve.clear()
 
             cm_call_oi_curve.clear()
             cm_put_oi_curve.clear()
+            
+            fut_jl_line.setValue(fut_realdata['전저'])
+            fut_jh_line.setValue(fut_realdata['전고'])
+            volume_base_line.setValue(fut_realdata['피봇'])
+            fut_pivot_line.setValue(fut_realdata['피봇'])  
 
             for i in range(nCount_cm_option_pairs):
                 temp = format(df_cm_call.iloc[i]['미결'], ',')
@@ -2688,7 +2690,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             cm_call_oi_right_curve.clear()
             cm_put_oi_right_curve.clear()
 
-            self.Plot_Opt.setRange(yRange=[0, 6], padding=0)
+            #self.Plot_Opt.setRange(yRange=[0, 6], padding=0)
 
             mv_line[0].setValue(1.2)
             mv_line[1].setValue(2.5)
@@ -3452,7 +3454,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 cm_put_volume_curve.setData(curve2_data)
             else:
                 kp200_curve.setData(curve1_data)
-                fut_curve.setData(curve2_data)            
+                fut_curve.setData(curve2_data)           
 
             str = '[{0:02d}:{1:02d}:{2:02d}] Plot Update 처리시간 : {3:0.2f} ms...\r'.format(delta_hour, delta_minute, delta_sec, (timeit.default_timer() - start_time) * 1000)
             #print(str)
