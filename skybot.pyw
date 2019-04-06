@@ -2088,7 +2088,7 @@ class t8415_Call_Worker(QThread):
         while True:
 
             data = cm_call_t8415_count
-            print('t8416 call', data)
+            #print('t8416 call', data)
 
             self.finished.emit(data)
             self.msleep(1100)
@@ -2103,7 +2103,7 @@ class t8415_Put_Worker(QThread):
         while True:
 
             data = cm_put_t8415_count
-            print('t8416 put', data)
+            #print('t8416 put', data)
 
             self.finished.emit(data)
             self.msleep(1100)
@@ -2118,7 +2118,7 @@ class t8416_Call_Worker(QThread):
         while True:
 
             data = cm_call_t8416_count
-            print('t8416 call', data)
+            #print('t8416 call', data)
 
             self.finished.emit(data)
             self.msleep(1100)
@@ -2133,7 +2133,7 @@ class t8416_Put_Worker(QThread):
         while True:
 
             data = cm_put_t8416_count
-            print('t8416 put', data)
+            #print('t8416 put', data)
 
             self.finished.emit(data)
             self.msleep(1100)
@@ -2148,7 +2148,7 @@ class t8416_NM_Call_Worker(QThread):
         while True:
 
             data = nm_call_t8416_count
-            print('t8416 nm call', data)
+            #print('t8416 nm call', data)
 
             self.finished.emit(data)
             self.msleep(1100)
@@ -2163,7 +2163,7 @@ class t8416_NM_Put_Worker(QThread):
         while True:
 
             data = nm_put_t8416_count
-            print('t8416 nm put', data)
+            #print('t8416 nm put', data)
 
             self.finished.emit(data)
             self.msleep(1100)
@@ -2507,7 +2507,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
         self.jif = JIF(parent=self)
         self.jif.AdviseRealData('0')
-        print('장운영정보를 요청합니다.')
+        #print('장운영정보를 요청합니다.')
 
         dt = datetime.datetime.now()
         current_str = dt.strftime('%H:%M:%S')
@@ -2763,7 +2763,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             self.call_node_color_clear()
             self.callnode_color_check()
         else:
-            if idx == 15:
+            if idx == 11:
+                self.call_open_check()
+            elif idx == 15:
                 self.call_db_check()
             else:
                 pass
@@ -2830,7 +2832,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             self.put_node_color_clear()
             self.putnode_color_check()
         else:
-            if idx == 15:
+            if idx == 11:
+                self.put_open_check()
+            elif idx == 15:
                 self.put_db_check()
             else:
                 pass
@@ -3016,7 +3020,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
     def t8416_call_request(self, data):
         try:
 
-            print('t8416_call_request', data, cm_call_code[data])
+            #print('t8416_call_request', data, cm_call_code[data])
             XQ = t8416(parent=self)
             XQ.Query(단축코드=cm_call_code[data], 시작일자=month_firstday_str, 종료일자=today_str)
 
@@ -3441,7 +3445,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 kp200_curve.setData(curve1_data)
                 fut_curve.setData(curve2_data)            
 
-            str = '[{0:02d}:{1:02d}:{2:02d}] Plot Update 처리시간 : {3:0.2f} ms...'.format(delta_hour, delta_minute, delta_sec, (timeit.default_timer() - start_time) * 1000)
+            str = '[{0:02d}:{1:02d}:{2:02d}] Plot Update 처리시간 : {3:0.2f} ms...\r'.format(delta_hour, delta_minute, delta_sec, (timeit.default_timer() - start_time) * 1000)
             #print(str)
             self.textBrowser.append(str)
         except:
@@ -3655,7 +3659,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
         call_gap_percent_local.sort()
 
         #print('call_gap_percent', call_gap_percent)
-        print('call_gap_percent_local', call_gap_percent_local)
+        #print('call_gap_percent_local', call_gap_percent_local)
 
         if call_gap_percent_local:
             tmp = np.array(call_gap_percent_local)
@@ -3868,7 +3872,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
         put_gap_percent_local.sort()
 
         #print('put_gap_percent', put_gap_percent)
-        print('put_gap_percent_local', put_gap_percent_local)
+        #print('put_gap_percent_local', put_gap_percent_local)
 
         if put_gap_percent_local:
             tmp = np.array(put_gap_percent_local)
@@ -4839,9 +4843,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             pass        
 			
         process_time = (timeit.default_timer() - start_time) * 1000
-        print('call color check process time : %.2f ms' % process_time)
+        #print('call color check process time : %.2f ms' % process_time)
 
-        str = '[{0:02d}:{1:02d}:{2:02d}] Call color check time : {3:0.2f} ms\r'.format(delta_hour, delta_minute, delta_sec, process_time)
+        str = '[{0:02d}:{1:02d}:{2:02d}] Call Table Color Check Time : {3:0.2f} ms\r'.format(delta_hour, delta_minute, delta_sec, process_time)
         self.textBrowser.append(str)
 
     def call_low_update_color_check(self):
@@ -5191,7 +5195,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             pass        
 
         process_time = (timeit.default_timer() - start_time) * 1000
-        print('call low color update check process time : %.2f ms' % process_time)
+        #print('call low color update check process time : %.2f ms' % process_time)
 
         str = '[{0:02d}:{1:02d}:{2:02d}] Call low color update : {3:0.2f} ms\r'.format(delta_hour, delta_minute, delta_sec, process_time)
         self.textBrowser.append(str)	
@@ -5543,7 +5547,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             pass
 
         process_time = (timeit.default_timer() - start_time) * 1000
-        print('call high color update check process time : %.2f ms' % process_time)
+        #print('call high color update check process time : %.2f ms' % process_time)
 
         str = '[{0:02d}:{1:02d}:{2:02d}] Call high color update : {3:0.2f} ms\r'.format(delta_hour, delta_minute, delta_sec, process_time)
         self.textBrowser.append(str)				
@@ -6442,9 +6446,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             pass
 			
         process_time = (timeit.default_timer() - start_time) * 1000
-        print('put color check process time : %.2f ms' % process_time)
+        #print('put color check process time : %.2f ms' % process_time)
 
-        str = '[{0:02d}:{1:02d}:{2:02d}] Put color check time : {3:0.2f} ms\r'.format(delta_hour, delta_minute, delta_sec, process_time)
+        str = '[{0:02d}:{1:02d}:{2:02d}] Put Table Color Check Time : {3:0.2f} ms\r'.format(delta_hour, delta_minute, delta_sec, process_time)
         self.textBrowser.append(str)
 
     def put_low_update_color_check(self):
@@ -6794,7 +6798,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             pass
 
         process_time = (timeit.default_timer() - start_time) * 1000
-        print('put low color update check process time : %.2f ms' % process_time)
+        #print('put low color update check process time : %.2f ms' % process_time)
 
         str = '[{0:02d}:{1:02d}:{2:02d}] Put low color update : {3:0.2f} ms\r'.format(delta_hour, delta_minute, delta_sec, process_time)
         self.textBrowser.append(str)
@@ -7146,7 +7150,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             pass        
 
         process_time = (timeit.default_timer() - start_time) * 1000
-        print('put high color update check process time : %.2f ms' % process_time)
+        #print('put high color update check process time : %.2f ms' % process_time)
 
         str = '[{0:02d}:{1:02d}:{2:02d}] Put high color update : {3:0.2f} ms\r'.format(delta_hour, delta_minute, delta_sec, process_time)
         self.textBrowser.append(str)
@@ -8149,8 +8153,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                         self.plot_worker.start()
                         self.plot_worker.daemon = True
-                        print('Plot 쓰레드가 시작됩니다...')
-                        print('\r')
+                        #print('Plot 쓰레드가 시작됩니다...')
+                        #print('\r')
 
                         str = '[{0:02d}:{1:02d}:{2:02d}] Plot 쓰레드가 시작됩니다.\r'.format(dt.hour, dt.minute, dt.second)
                         self.textBrowser.append(str)
@@ -9133,8 +9137,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                 self.plot_worker.start()
                 self.plot_worker.daemon = True
-                print('Plot 쓰레드가 시작됩니다...')
-                print('\r')
+                #print('Plot 쓰레드가 시작됩니다...')
+                #print('\r')
 
                 str = '[{0:02d}:{1:02d}:{2:02d}] Plot 쓰레드가 시작됩니다.\r'.format(dt.hour, dt.minute,
                                                                             dt.second)
@@ -9211,8 +9215,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                 actval_increased = True
 
-                print('새로운 행사가 추가됨 !!!')
-                print('\r')
+                #print('새로운 행사가 추가됨 !!!')
+                #print('\r')
                 str = '[{0:02d}:{1:02d}:{2:02d}] 새로운 행사가 추가됨 !!!\r'.format(dt.hour, dt.minute, dt.second)
                 self.textBrowser.append(str)
 
@@ -9329,8 +9333,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 else:
                     pass
 
-                str = '[{0:02d}:{1:02d}:{2:02d}] Call 과거데이타({3}/{4}) 수신중...\r'.\
-                    format(dt.hour, dt.minute, dt.second, cm_call_t8416_count + 1, nCount_cm_option_pairs)
+                str = '[{0:02d}:{1:02d}:{2:02d}] Call 행사가 {3}개중 {4}번째 Packet을 수신했습니다.\r'.\
+                    format(dt.hour, dt.minute, dt.second, nCount_cm_option_pairs, cm_call_t8416_count + 1)
 
                 self.textBrowser.append(str)
 
@@ -9467,7 +9471,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 else:
                     pass
 
-                str = '[{0:02d}:{1:02d}:{2:02d}] Put 과거데이타({3}/{4}) 수신중...\r'.format(dt.hour, dt.minute, dt.second, cm_put_t8416_count + 1, nCount_cm_option_pairs)
+                str = '[{0:02d}:{1:02d}:{2:02d}] Put 행사가 {3}개중 {4}번째 Packet을 수신했습니다.\r'.format(dt.hour, dt.minute, dt.second, 
+                    nCount_cm_option_pairs, cm_put_t8416_count + 1)
                 self.textBrowser.append(str)
 
                 cm_put_t8416_count += 1
@@ -9521,8 +9526,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 else:
                     pass
 
-                print('옵션 과거데이타 수신완료 !!!')
-                print('\r')
+                #print('옵션 과거데이타 수신완료 !!!')
+                #print('\r')
 
                 if overnight:
 
@@ -9575,8 +9580,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                         self.plot_worker.start()
                         self.plot_worker.daemon = True
-                        print('Plot 쓰레드가 시작됩니다...')
-                        print('\r')
+                        #print('Plot 쓰레드가 시작됩니다...')
+                        #print('\r')
 
                         str = '[{0:02d}:{1:02d}:{2:02d}] Plot 쓰레드가 시작됩니다.\r'.format(dt.hour, dt.minute,
                                                                                     dt.second)
@@ -10134,7 +10139,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     call_gap_percent_local = [value for value in temp if not math.isnan(value)]
                     call_gap_percent_local.sort()
 
-                    print('call_gap_percent_local', call_gap_percent_local)
+                    #print('call_gap_percent_local', call_gap_percent_local)
 
                     if call_gap_percent_local:
                         tmp = np.array(call_gap_percent_local)
@@ -11411,14 +11416,14 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 # 현물 장마감 5분전
                 elif result['장구분'] == '1' and result['장상태'] == '44':
 
-                    print('현물 장마감 5분전입니다.')
+                    #print('현물 장마감 5분전입니다.')
                     str = '[{0:02d}:{1:02d}:{2:02d}] 현물 장마감 5분전입니다.\r'.format(dt.hour, dt.minute, dt.second)
                     self.textBrowser.append(str)
 
                 # 현물 장마감 1분전
                 elif result['장구분'] == '1' and result['장상태'] == '43':
 
-                    print('현물 장마감 1분전입니다.')
+                    #print('현물 장마감 1분전입니다.')
                     str = '[{0:02d}:{1:02d}:{2:02d}] 현물 장마감 1분전입니다.\r'.format(dt.hour, dt.minute, dt.second)
                     self.textBrowser.append(str)
 
@@ -11449,14 +11454,14 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 # 장후 동시호가 시작
                 elif result['장구분'] == '5' and result['장상태'] == '31':
 
-                    print('장후 동시호가가 시작되었습니다.')
+                    #print('장후 동시호가가 시작되었습니다.')
                     str = '[{0:02d}:{1:02d}:{2:02d}] 장후 동시호가가 시작되었습니다.\r'.format(dt.hour, dt.minute, dt.second)
                     self.textBrowser.append(str)
 
                 # 주간 선물/옵션장 종료
                 elif result['장구분'] == '5' and result['장상태'] == '41':
 
-                    print('주간 선물/옵션장이 종료되었습니다.')
+                    #print('주간 선물/옵션장이 종료되었습니다.')
                     str = '[{0:02d}:{1:02d}:{2:02d}] 주간 선물/옵션장이 종료되었습니다.\r'.format(dt.hour, dt.minute, dt.second)
                     self.textBrowser.append(str)
 
@@ -11465,7 +11470,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 # 야간 선물장 종료
                 elif result['장구분'] == '7' and result['장상태'] == '41':
 
-                    print('야간 선물장이 종료되었습니다.')
+                    #print('야간 선물장이 종료되었습니다.')
                     str = '[{0:02d}:{1:02d}:{2:02d}] 야간 선물장이 종료되었습니다.\r'.format(dt.hour, dt.minute, dt.second)
                     self.textBrowser.append(str)
 
@@ -11474,7 +11479,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 # 야간 옵션장 종료
                 elif result['장구분'] == '8' and result['장상태'] == '41':
 
-                    print('야간 옵션장이 종료되었습니다...')
+                    #print('야간 옵션장이 종료되었습니다...')
                     str = '[{0:02d}:{1:02d}:{2:02d}] 야간 옵션장이 종료되었습니다.\r'.format(dt.hour, dt.minute, dt.second)
                     self.textBrowser.append(str)
 
@@ -11604,7 +11609,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                             self.label_naver.setText(jisu_str)
                             self.label_naver.setStyleSheet('background-color: yellow ; color: black')
                     else:
-                        print('단축코드', result['단축코드'])
+                        #print('단축코드', result['단축코드'])
+                        pass
                 else:
                     pass
 
@@ -13388,13 +13394,13 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
         if overnight:
 
             #self.timer.stop()
-            print('All Timer is stopped !!!')
+            #print('All Timer is stopped !!!')
             '''
             if self.plot_worker.isRunning():
                 self.plot_worker.terminate()
                 print('Plot Thread is terminated...')
             '''
-            print('서버연결을 Release 합니다.')
+            #print('서버연결을 Release 합니다.')
             self.parent.connection.logout()
             self.parent.connection.disconnect()
             self.parent.statusbar.showMessage("서버연결을 Release 합니다.")
@@ -14571,7 +14577,7 @@ class 화면_차월물옵션전광판(QDialog, Ui_차월물옵션전광판):
                 else:
                     pass
 
-                str = '[{0:02d}:{1:02d}:{2:02d}] Call 과거데이타({3}/{4}) 수신중...\r'.format(dt.hour, dt.minute,
+                str = '[{0:02d}:{1:02d}:{2:02d}] Call 과거데이타({3}/{4}) 수신했습니다.\r'.format(dt.hour, dt.minute,
                                                                         dt.second, nm_call_t8416_count + 1,
                                                                         nCount_nm_option_pairs)
                 self.textBrowser.append(str)
@@ -14684,7 +14690,7 @@ class 화면_차월물옵션전광판(QDialog, Ui_차월물옵션전광판):
                 else:
                     pass
 
-                str = '[{0:02d}:{1:02d}:{2:02d}] Put 과거데이타({3}/{4}) 수신중...\r'.format(dt.hour, dt.minute,
+                str = '[{0:02d}:{1:02d}:{2:02d}] Put 과거데이타({3}/{4}) 수신했습니다.\r'.format(dt.hour, dt.minute,
                                                                        dt.second, nm_put_t8416_count + 1,
                                                                        nCount_nm_option_pairs)
                 self.textBrowser.append(str)
