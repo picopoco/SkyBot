@@ -1,60 +1,46 @@
 # -*- coding: utf-8 -*-
 
-프로그램정보 = [
-    ['프로그램명','mymoneybot-eBEST'],
-    ['Version','1.4'],
-    ['개발일','2018-02-28'],
-    ['2018-06-04','포트폴리오 더블클릭으로 삭제 기능 추가'],
-    ['2018-05-23','시장가매도, query->ActiveX 오류수정'],
-    ['2018-07-19','국내선물옵션, 해외선물옵션에 필요한 모듈을 XAQuery, XAReals에 추가'],
-    ['2018-07-19','검색식에서 종목이 빠지는 경우, 손절 및 익절이 나가지 않는 부분 추가'],
-    ['2018-07-20','체결시간과 종목검색에서 종목이 빠지는 시간차가 있는 경우 주문이 나가지 않는 부분추가'],
-    ['2018-07-25','종목검색 중지시 계속 검색된 종목이 들어오는 문제 수정'],
-    ['2018-08-01','종목검색, Chartindex에서 식별자를 사용하는 방법 통일'],
-    ['2018-08-01','한번에 수량이 다 체결된 경우 포트에 반영되지 않는 것을 수정'],
-    ['2018-08-07','조건검색시 다른 조건검색과 섞이는 것을 수정'],
-    ['2018-08-07','API메뉴중 백업에 OnReceiveMessage 추가']
-]
-
-import sys, os
-import datetime, time
-import win32com.client
-import pythoncom
-import inspect
+import sys
+import os
+import datetime
+import time
+# import win32com.client
+# import pythoncom
+# import inspect
 
 import pickle
-import uuid
-import base64
-import subprocess
-from subprocess import Popen
+# import uuid
+# import base64
+# import subprocess
+# from subprocess import Popen
 import webbrowser
 
-import PyQt5
+# import PyQt5
+from PyQt5.QtCore import Qt
 from PyQt5 import QtCore, QtGui, uic
-from PyQt5 import QAxContainer
+# from PyQt5 import QAxContainer
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
-from PyQt5.QtWidgets import QApplication, QLabel, QLineEdit, QMainWindow, QDialog, QMessageBox, QProgressBar
-from PyQt5.QtGui import QPainter, QColor, QPen
-from PyQt5.QAxContainer import *
-from PyQt5.QtTest import QTest
+from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QMessageBox
+from PyQt5.QtGui import QColor
+# from PyQt5.QAxContainer import *
+# from PyQt5.QtTest import QTest
 
 import numpy as np
-from numpy import NaN, Inf, arange, isscalar, asarray, array
+from numpy import NaN
 
 import pandas as pd
 import pandas.io.sql as pdsql
-from pandas import DataFrame, Series
+from pandas import DataFrame
 
 import sqlite3
-
 import logging
 import logging.handlers
 
-#import threading
-from threading import Timer
-from multiprocessing import Pool, Process, Queue
+# import threading
+# from threading import Timer
+# from multiprocessing import Pool, Process, Queue
 
 from XASessions import *
 from XAQueries import *
@@ -62,11 +48,10 @@ from XAReals import *
 
 from FileWatcher import *
 from Utils import *
-
 import ctypes
 
-#from apscheduler.jobstores.base import JobLookupError
-#from apscheduler.schedulers.background import BackgroundScheduler
+# from apscheduler.jobstores.base import JobLookupError
+# from apscheduler.schedulers.background import BackgroundScheduler
 
 from enum import Enum
 import timeit
@@ -77,6 +62,22 @@ import collections
 from PIL import ImageGrab
 import win32gui
 import copy
+
+프로그램정보 = [
+    ['프로그램명', 'mymoneybot-eBEST'], 
+    ['Version', '1.4'],
+    ['개발일', '2018-02-28'],
+    ['2018-06-04', '포트폴리오 더블클릭으로 삭제 기능 추가'],
+    ['2018-05-23', '시장가매도, query->ActiveX 오류수정'],
+    ['2018-07-19', '국내선물옵션, 해외선물옵션에 필요한 모듈을 XAQuery, XAReals에 추가'],
+    ['2018-07-19', '검색식에서 종목이 빠지는 경우, 손절 및 익절이 나가지 않는 부분 추가'],
+    ['2018-07-20', '체결시간과 종목검색에서 종목이 빠지는 시간차가 있는 경우 주문이 나가지 않는 부분추가'],
+    ['2018-07-25', '종목검색 중지시 계속 검색된 종목이 들어오는 문제 수정'],
+    ['2018-08-01', '종목검색, Chartindex에서 식별자를 사용하는 방법 통일'],
+    ['2018-08-01', '한번에 수량이 다 체결된 경우 포트에 반영되지 않는 것을 수정'],
+    ['2018-08-07', '조건검색시 다른 조건검색과 섞이는 것을 수정'],
+    ['2018-08-07', 'API메뉴중 백업에 OnReceiveMessage 추가']
+]
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.expand_frame_repr', False)
@@ -186,7 +187,7 @@ OPT_PUT = '800'
 FUTURES = '900'
 CME = '950'
 
-SAMSUNG	= '005930'
+SAMSUNG = '005930'
 MOBIS = '012330'
 NAVER = '035420'
 
@@ -402,10 +403,10 @@ df_plotdata_cm_call = pd.DataFrame()
 df_plotdata_cm_put = pd.DataFrame()
 df_plotdata_cm_call_volume = pd.DataFrame()
 df_plotdata_cm_put_volume = pd.DataFrame()
-#df_plotdata_cm_volume_cha = pd.DataFrame()
+# df_plotdata_cm_volume_cha = pd.DataFrame()
 df_plotdata_cm_call_oi = pd.DataFrame()
 df_plotdata_cm_put_oi = pd.DataFrame()
-#df_plotdata_cm_oi_cha = pd.DataFrame()
+# df_plotdata_cm_oi_cha = pd.DataFrame()
 
 df_plotdata_fut = pd.DataFrame()
 df_plotdata_kp200 = pd.DataFrame()
@@ -466,22 +467,22 @@ royalblue = QColor(0x41, 0x69, 0xE1)
 
 대맥점색 = Qt.green
 
-futpen=pg.mkPen(blueviolet, width=2, style=QtCore.Qt.SolidLine)
-rpen=pg.mkPen('r', width=2, style=QtCore.Qt.SolidLine)
-bpen=pg.mkPen('b', width=2, style=QtCore.Qt.SolidLine)
-gpen=pg.mkPen('g', width=2, style=QtCore.Qt.SolidLine)
-mvpen=pg.mkPen('g', width=1, style=QtCore.Qt.DotLine)
-tpen=pg.mkPen(lightyellow, width=2, style=QtCore.Qt.DotLine)
+futpen = pg.mkPen(blueviolet, width=2, style=QtCore.Qt.SolidLine)
+rpen = pg.mkPen('r', width=2, style=QtCore.Qt.SolidLine)
+bpen = pg.mkPen('b', width=2, style=QtCore.Qt.SolidLine)
+gpen = pg.mkPen('g', width=2, style=QtCore.Qt.SolidLine)
+mvpen = pg.mkPen('g', width=1, style=QtCore.Qt.DotLine)
+tpen = pg.mkPen(lightyellow, width=2, style=QtCore.Qt.DotLine)
 
-fut_jl_pen=pg.mkPen(aqua, width=2, style=QtCore.Qt.DotLine)
-fut_jh_pen=pg.mkPen(orangered, width=2, style=QtCore.Qt.DotLine)
-fut_pvt_pen=pg.mkPen(magenta, width=2, style=QtCore.Qt.DotLine)
+fut_jl_pen = pg.mkPen(aqua, width=2, style=QtCore.Qt.DotLine)
+fut_jh_pen = pg.mkPen(orangered, width=2, style=QtCore.Qt.DotLine)
+fut_pvt_pen = pg.mkPen(magenta, width=2, style=QtCore.Qt.DotLine)
 
-aqua_pen=pg.mkPen(aqua, width=2, style=QtCore.Qt.SolidLine)
-magenta_pen=pg.mkPen(magenta, width=2, style=QtCore.Qt.SolidLine)
-green_pen=pg.mkPen('g', width=2, style=QtCore.Qt.SolidLine)
+aqua_pen = pg.mkPen(aqua, width=2, style=QtCore.Qt.SolidLine)
+magenta_pen = pg.mkPen(magenta, width=2, style=QtCore.Qt.SolidLine)
+green_pen = pg.mkPen('g', width=2, style=QtCore.Qt.SolidLine)
 
-#fut_axY = []
+# fut_axY = []
 
 overnight = False
 
@@ -517,19 +518,19 @@ volume_base_line = None
 
 cm_call_volume_curve = None
 cm_put_volume_curve = None
-#cm_volume_cha_curve = None
+# cm_volume_cha_curve = None
 
 cm_call_oi_curve = None
 cm_put_oi_curve = None
-#cm_oi_cha_curve = None
+# cm_oi_cha_curve = None
 
 cm_call_volume_right_curve = None
 cm_put_volume_right_curve = None
-#cm_volume_cha_right_curve = None
+# cm_volume_cha_right_curve = None
 
 cm_call_oi_right_curve = None
 cm_put_oi_right_curve = None
-#cm_oi_cha_right_curve = None
+# cm_oi_cha_right_curve = None
 
 volume_cha_sign = []
 
@@ -606,9 +607,11 @@ comboindex2 = 0
 
 ########################################################################################################################
 
+
 def sqliteconn():
     conn = sqlite3.connect(DATABASE)
     return conn
+
 
 # Xing 관리자모드 실행 체크함수
 def XingAdminCheck():
@@ -619,6 +622,7 @@ def XingAdminCheck():
     else:
         print('일반권한으로 실행된 프로세스입니다.')
         return False
+
 
 class PandasModel(QtCore.QAbstractTableModel):
     def __init__(self, data=None, parent=None):
@@ -657,11 +661,12 @@ class PandasModel(QtCore.QAbstractTableModel):
     def flags(self, index):
         return QtCore.Qt.ItemIsEnabled
 
+
 class RealDataTableModel(QAbstractTableModel):
     def __init__(self, parent=None):
         QtCore.QAbstractTableModel.__init__(self, parent)
         self.realdata = {}
-        self.headers = ['종목코드', '현재가' , '전일대비', '등락률' , '매도호가', '매수호가', '누적거래량', '시가' , '고가' , '저가' , '거래회전율', '시가총액']
+        self.headers = ['종목코드', '현재가', '전일대비', '등락률', '매도호가', '매수호가', '누적거래량', '시가', '고가', '저가', '거래회전율', '시가총액']
 
     def rowCount(self, index=QModelIndex()):
         return len(self.realdata)
@@ -698,6 +703,7 @@ class RealDataTableModel(QAbstractTableModel):
         self.beginResetModel()
         self.endResetModel()
 
+
 class CPluginManager:
     plugins = None
     @classmethod
@@ -712,7 +718,7 @@ class CPluginManager:
             if ext == '.py':
                 mod = __import__(fname)
                 robot = mod.robot_loader()
-                if robot != None:
+                if robot is not None:
                     result[robot.Name] = robot
         sys.path.pop(0)
 
@@ -722,6 +728,8 @@ class CPluginManager:
 
 
 Ui_계좌정보조회, QtBaseClass_계좌정보조회 = uic.loadUiType(UI_DIR+"계좌정보조회.ui")
+
+
 class 화면_계좌정보(QDialog, Ui_계좌정보조회):
     def __init__(self, parent=None):
         super(화면_계좌정보, self).__init__(parent)
@@ -767,7 +775,7 @@ class 화면_계좌정보(QDialog, Ui_계좌정보조회):
         self.계좌번호 = self.comboBox.currentText().strip()
         self.비밀번호 = self.lineEdit.text().strip()
 
-        self.XQ_t0424.Query(계좌번호=self.계좌번호,비밀번호=self.비밀번호,단가구분='1',체결구분='0',단일가구분='0',제비용포함여부='1',CTS_종목번호='')
+        self.XQ_t0424.Query(계좌번호=self.계좌번호, 비밀번호=self.비밀번호, 단가구분='1', 체결구분='0', 단일가구분='0', 제비용포함여부='1', CTS_종목번호='')
 
         QTimer().singleShot(3*1000, self.inquiry)
 
@@ -827,7 +835,7 @@ class 화면_일별가격정보백업(QDialog, Ui_일별가격정보백업):
                     else:
                         QMessageBox.about(self, "백업완료","백업을 완료하였습니다..")
             except Exception as e:
-                pass
+                print('Handling run-time error : ', e)
 
     def Request(self, result=[]):
         if len(result) > 0:
@@ -838,7 +846,7 @@ class 화면_일별가격정보백업(QDialog, Ui_일별가격정보백업):
                 # print('%s %s' % (self.단축코드[0], self.단축코드[1]))
                 self.XQ_t1305.Query(단축코드=self.단축코드[0], 일주월구분='1', 날짜='', IDX='', 건수=self.조회건수, 연속조회=False)
             except Exception as e:
-                pass
+                print('Handling run-time error : ', e)
 
     def Backup_One(self):
         idx = self.comboBox.currentIndex()
@@ -866,6 +874,8 @@ class 화면_일별가격정보백업(QDialog, Ui_일별가격정보백업):
 
 
 Ui_일별업종정보백업, QtBaseClass_일별업종정보백업 = uic.loadUiType(UI_DIR+"일별업종정보백업.ui")
+
+
 class 화면_일별업종정보백업(QDialog, Ui_일별업종정보백업):
     def __init__(self, parent=None):
         super(화면_일별업종정보백업, self).__init__(parent)
