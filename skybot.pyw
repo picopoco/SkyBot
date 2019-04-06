@@ -3315,38 +3315,25 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             # 호가 갱신
             self.quote_display()
 
-            # 4종의 그래프데이타를 받아옴
-            global selected_call, selected_put
-                               
-            call_idx = []
-            put_idx = []
+            # X축 세로선 데이타처리
+            if x_idx > 10 and opt_x_idx > 10:
 
-            for i in range(nRowCount):
+                if comboindex1 == 2:
 
-                call_ckbox = self.tableWidget_call.cellWidget(i, 0)
-
-                if isinstance(call_ckbox, QCheckBox):
-                    if call_ckbox.isChecked():
-                        call_idx.append(i)
-                    else:
-                        pass
+                    time_line_fut.setValue(x_idx + 1)
                 else:
-                    pass
+                    time_line_fut.setValue(opt_x_idx + 1)
 
-                put_ckbox = self.tableWidget_put.cellWidget(i, 0)
+                time_line_opt.setValue(opt_x_idx + 1)
+            else:
+                pass
 
-                if isinstance(put_ckbox, QCheckBox):
-                    if put_ckbox.isChecked():
-                        put_idx.append(i)
-                    else:
-                        pass
-                else:
-                    pass                
-
-            selected_call = call_idx
-            selected_put = put_idx 
-
+            # 옵션그래프 초기화
             if comboindex2 == 2:
+                
+                for i in range(9):
+                    call_curve[i].clear()
+                    put_curve[i].clear()
 
                 # 옵션 Y축 최대값 구하기
                 axY = self.Plot_Opt.getAxis('left')
@@ -3365,55 +3352,62 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     mv_line[7].setValue(7.1)
                     mv_line[8].setValue(8.1)
                 else:
-                    pass                
-            else:
-                pass
-                                   
-            if comboindex2 == 2:
-                
-                for i in range(9):
-                    call_curve[i].clear()
-                    put_curve[i].clear()
-            else:
-                pass
+                    pass
 
-            if x_idx > 10 and opt_x_idx > 10:
+                # 4종의 그래프데이타를 받아옴
+                global selected_call, selected_put
+                               
+                call_idx = []
+                put_idx = []
 
-                if comboindex1 == 2:
+                for i in range(nCount_cm_option_pairs):
 
-                    time_line_fut.setValue(x_idx + 1)
-                else:
-                    time_line_fut.setValue(opt_x_idx + 1)
+                    call_ckbox = self.tableWidget_call.cellWidget(i, 0)
 
-                time_line_opt.setValue(opt_x_idx + 1)
-            else:
-                pass       
-
-            for actval, infos in data.items():
-
-                index = cm_call_actval.index(actval)          
-
-                for i in range(len(call_idx)):
-
-                    if index == call_idx[i]:
-
-                        if comboindex2 == 2:
-                            call_curve[i].setData(infos[0])
-                        else:
-                            pass
-                    else:
-                        pass                    
-
-                for i in range(len(put_idx)):
-
-                    if index == put_idx[i]:
-
-                        if comboindex2 == 2:
-                            put_curve[i].setData(infos[1])
+                    if isinstance(call_ckbox, QCheckBox):
+                        if call_ckbox.isChecked():
+                            call_idx.append(i)
                         else:
                             pass
                     else:
                         pass
+
+                    put_ckbox = self.tableWidget_put.cellWidget(i, 0)
+
+                    if isinstance(put_ckbox, QCheckBox):
+                        if put_ckbox.isChecked():
+                            put_idx.append(i)
+                        else:
+                            pass
+                    else:
+                        pass                
+
+                selected_call = call_idx
+                selected_put = put_idx            
+            else:
+                pass            
+
+            for actval, infos in data.items():
+
+                index = cm_call_actval.index(actval)
+
+                if comboindex2 == 2:
+
+                    for i in range(len(call_idx)):
+
+                        if index == call_idx[i]:
+                            call_curve[i].setData(infos[0])
+                        else:
+                            pass                    
+
+                    for i in range(len(put_idx)):
+
+                        if index == put_idx[i]:
+                            put_curve[i].setData(infos[1])
+                        else:
+                            pass
+                else:
+                    pass                
 
                 curve1_data = infos[2]
                 curve2_data = infos[3] 
