@@ -2835,8 +2835,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             else:
                 pass
 
-        self.tableWidget_call.resizeColumnsToContents()
-        self.tableWidget_call.setColumnWidth(0, 15)
+        self.tableWidget_put.resizeColumnsToContents()
+        self.tableWidget_put.setColumnWidth(0, 15)
         
         return
 
@@ -7324,20 +7324,23 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             self.tableWidget_fut.setItem(1, Futures_column.진폭.value, item)
 
             fut_realdata['거래량'] = df['거래량']
+            temp = format(fut_realdata['거래량'], ',')
 
-            item = QTableWidgetItem("{0}".format(df['거래량']))
+            item = QTableWidgetItem(temp)
             item.setTextAlignment(Qt.AlignCenter)
             self.tableWidget_fut.setItem(1, Futures_column.거래량.value, item)
 
             fut_realdata['미결'] = df['미결제량']
+            temp = format(fut_realdata['미결'], ',')
 
-            item = QTableWidgetItem("{0}".format(df['미결제량']))
+            item = QTableWidgetItem(temp)
             item.setTextAlignment(Qt.AlignCenter)
             self.tableWidget_fut.setItem(1, Futures_column.OI.value, item)
 
             fut_realdata['미결증감'] = df['미결제증감']
+            temp = format(fut_realdata['미결증감'], ',')
 
-            item = QTableWidgetItem("{0}".format(fut_realdata['미결증감']))
+            item = QTableWidgetItem(temp)
             item.setTextAlignment(Qt.AlignCenter)
 
             if fut_realdata['미결증감'] < 0:
@@ -8421,17 +8424,23 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             self.tableWidget_fut.setItem(0, Futures_column.진폭.value, item)
 
             fut_realdata['거래량'] = df['거래량']
-            item = QTableWidgetItem("{0}".format(fut_realdata['거래량']))
+            temp = format(fut_realdata['거래량'], ',')
+
+            item = QTableWidgetItem(temp)
             item.setTextAlignment(Qt.AlignCenter)
             self.tableWidget_fut.setItem(0, Futures_column.거래량.value, item)
 
             fut_realdata['미결'] = df['미결제량']
-            item = QTableWidgetItem("{0}".format(fut_realdata['미결']))
+            temp = format(fut_realdata['미결'], ',')
+
+            item = QTableWidgetItem(temp)
             item.setTextAlignment(Qt.AlignCenter)
             self.tableWidget_fut.setItem(0, Futures_column.OI.value, item)
 
             fut_realdata['미결증감'] = df['미결제증감']
-            item = QTableWidgetItem("{0}".format(fut_realdata['미결증감']))
+            temp = format(fut_realdata['미결증감'], ',')
+
+            item = QTableWidgetItem(temp)
             item.setTextAlignment(Qt.AlignCenter)
 
             if fut_realdata['미결증감'] < 0:
@@ -12671,59 +12680,60 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     else:
                         pass
 
+                    # 장중 거래량은 누적거래량이 아닌 순매수체결량 임
+                    #fut_realdata['거래량'] = result['누적거래량']
+                    fut_realdata['거래량'] = result['매수누적체결량'] - result['매도누적체결량']
+
+                    temp = format(fut_realdata['거래량'], ',')
+
+                    item = QTableWidgetItem(temp)
+                    item.setTextAlignment(Qt.AlignCenter)
+
+                    if fut_realdata['거래량'] > 0:
+
+                        item.setBackground(QBrush(적색))
+                        item.setForeground(QBrush(흰색))
+                    elif fut_realdata['거래량'] < 0:
+
+                        item.setBackground(QBrush(청색))
+                        item.setForeground(QBrush(흰색))
+                    else:
+                        item.setBackground(QBrush(기본바탕색))
+                        item.setForeground(QBrush(검정색))
+
                     if overnight:
-                        fut_volume = int(self.tableWidget_fut.item(0, Futures_column.거래량.value).text())
+                        self.tableWidget_fut.setItem(0, Futures_column.거래량.value, item)
                     else:
-                        fut_volume = int(self.tableWidget_fut.item(1, Futures_column.거래량.value).text())
+                        self.tableWidget_fut.setItem(1, Futures_column.거래량.value, item)
 
-                    if result['누적거래량'] != fut_volume:
+                    fut_realdata['미결'] = result['미결제약정수량']  
+                    temp = format(fut_realdata['미결'], ',')                     
 
-                        fut_realdata['거래량'] = result['누적거래량']
-
-                        item = QTableWidgetItem("{0}".format(result['누적거래량']))
-                        item.setTextAlignment(Qt.AlignCenter)
-
-                        if overnight:
-                            self.tableWidget_fut.setItem(0, Futures_column.거래량.value, item)
-                        else:
-                            self.tableWidget_fut.setItem(1, Futures_column.거래량.value, item)
-                    else:
-                        pass
+                    item = QTableWidgetItem(temp)
+                    item.setTextAlignment(Qt.AlignCenter)
 
                     if overnight:
-                        fut_oid = float(self.tableWidget_fut.item(0, Futures_column.OID.value).text())
+                        self.tableWidget_fut.setItem(0, Futures_column.OI.value, item)
                     else:
-                        fut_oid = float(self.tableWidget_fut.item(1, Futures_column.OID.value).text())
+                        self.tableWidget_fut.setItem(1, Futures_column.OI.value, item)
 
-                    if result['미결제약정증감'] != fut_oid:
+                    fut_realdata['미결증감'] = result['미결제약정증감']
+                    temp = format(fut_realdata['미결증감'], ',')  
 
-                        fut_realdata['미결'] = result['미결제약정수량']
-                        fut_realdata['미결증감'] = result['미결제약정증감']
+                    item = QTableWidgetItem(temp)
+                    item.setTextAlignment(Qt.AlignCenter)
 
-                        item = QTableWidgetItem("{0}".format(result['미결제약정수량']))
-                        item.setTextAlignment(Qt.AlignCenter)
-
-                        if overnight:
-                            self.tableWidget_fut.setItem(0, Futures_column.OI.value, item)
-                        else:
-                            self.tableWidget_fut.setItem(1, Futures_column.OI.value, item)
-
-                        item = QTableWidgetItem("{0}".format(result['미결제약정증감']))
-                        item.setTextAlignment(Qt.AlignCenter)
-
-                        if result['미결제약정증감'] < 0:
-                            item.setBackground(QBrush(녹색))
-                        else:
-                            item.setBackground(QBrush(기본바탕색))
-
-                        if overnight:
-                            self.tableWidget_fut.setItem(0, Futures_column.OID.value, item)
-                        else:
-                            self.tableWidget_fut.setItem(1, Futures_column.OID.value, item)
-
-                        self.tableWidget_fut.resizeColumnsToContents()
+                    if result['미결제약정증감'] < 0:
+                        item.setBackground(QBrush(녹색))
                     else:
-                        pass
+                        item.setBackground(QBrush(기본바탕색))
+
+                    if overnight:
+                        self.tableWidget_fut.setItem(0, Futures_column.OID.value, item)
+                    else:
+                        self.tableWidget_fut.setItem(1, Futures_column.OID.value, item)
+
+                    self.tableWidget_fut.resizeColumnsToContents()
 
                     if szTrCode == 'FC0':
 
