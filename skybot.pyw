@@ -2726,278 +2726,134 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
     def _call_horizontal_header_clicked(self, idx):
 
         global call_node_state
-        global cm_call_종가, cm_call_종가_extend, cm_call_피봇, cm_call_피봇_extend, cm_call_시가, cm_call_시가_extend
-        global call_background_color1, call_foreground_color1, call_background_color2, call_foreground_color2
-        global call_background_color3, call_foreground_color3, call_background_color4, call_foreground_color4
-        global call_gap_percent, call_db_percent
 
-        col_text = self.tableWidget_call.horizontalHeaderItem(idx).text()
+        if idx == 3 or idx == 4 or idx == 5 or idx == 6 or idx == 7 or idx == 8 or idx == 9 or idx == 10:
 
-        if col_text.find(' √') == -1:
-            item = QTableWidgetItem(col_text + ' √')
-            self.tableWidget_call.setHorizontalHeaderItem(idx, item)
-            print("call header column.. ", idx, col_text)
+            col_text = self.tableWidget_call.horizontalHeaderItem(idx).text()
 
-            if idx == 3:
-                call_node_state['기준가'] = True
-            elif idx == 4:
-                call_node_state['월저'] = True
-            elif idx == 5:
-                call_node_state['월고'] = True
-            elif idx == 6:
-                call_node_state['전저'] = True
-            elif idx == 7:
-                call_node_state['전고'] = True
-            elif idx == 8:
-                call_node_state['종가'] = True
-            elif idx == 9:
-                call_node_state['피봇'] = True
-            elif idx == 10:
-                call_node_state['시가'] = True
+            if col_text.find(' √') == -1:
+                item = QTableWidgetItem(col_text + ' √')
+                self.tableWidget_call.setHorizontalHeaderItem(idx, item)
+                print("call header column.. ", idx, col_text)
 
-                #self.call_open_check()
-                #self.call_color_check()
-
-            elif idx == 15:
-                call_node_state['대비'] = True
-
-                self.call_db_check()
-
-            elif idx == 17:
-                call_node_state['미결'] = True
-
-            elif idx == 18:
-                call_node_state['미결증감'] = True
-
-                미결증감 = format(round(df_cm_call['미결증감'].mean()), ',') + ' √'
-
-                if 미결증감 != self.tableWidget_call.horizontalHeaderItem(Option_column.OID.value).text():
-                    item = QTableWidgetItem(미결증감)
-                    self.tableWidget_call.setHorizontalHeaderItem(Option_column.OID.value, item)
+                if idx == 3:
+                    call_node_state['기준가'] = True
+                elif idx == 4:
+                    call_node_state['월저'] = True
+                elif idx == 5:
+                    call_node_state['월고'] = True
+                elif idx == 6:
+                    call_node_state['전저'] = True
+                elif idx == 7:
+                    call_node_state['전고'] = True
+                elif idx == 8:
+                    call_node_state['종가'] = True
+                elif idx == 9:
+                    call_node_state['피봇'] = True
+                elif idx == 10:
+                    call_node_state['시가'] = True
                 else:
                     pass
             else:
-                pass
+                item = QTableWidgetItem(col_text.replace(' √', ''))
+                self.tableWidget_call.setHorizontalHeaderItem(idx, item)
+                print("call header column.. ", idx, col_text)
+
+                if idx == 3:
+                    call_node_state['기준가'] = False
+                elif idx == 4:
+                    call_node_state['월저'] = False
+                elif idx == 5:
+                    call_node_state['월고'] = False
+                elif idx == 6:
+                    call_node_state['전저'] = False
+                elif idx == 7:
+                    call_node_state['전고'] = False
+                elif idx == 8:
+                    call_node_state['종가'] = False
+                elif idx == 9:
+                    call_node_state['피봇'] = False
+                elif idx == 10:
+                    call_node_state['시가'] = False
+            
+            self.call_node_color_clear()
+            self.callnode_color_check()
         else:
-            item = QTableWidgetItem(col_text.replace(' √', ''))
-            self.tableWidget_call.setHorizontalHeaderItem(idx, item)
-            print("call header column.. ", idx, col_text)
-
-            if idx == 3:
-                call_node_state['기준가'] = False
-            elif idx == 4:
-                call_node_state['월저'] = False
-            elif idx == 5:
-                call_node_state['월고'] = False
-            elif idx == 6:
-                call_node_state['전저'] = False
-            elif idx == 7:
-                call_node_state['전고'] = False
-            elif idx == 8:
-                call_node_state['종가'] = False
-            elif idx == 9:
-                call_node_state['피봇'] = False
-            elif idx == 10:
-                call_node_state['시가'] = False
-
-            elif idx == 15:
-                call_node_state['대비'] = False
-            elif idx == 17:
-                call_node_state['미결'] = False
-
-                item = QTableWidgetItem('거래량')
-                self.tableWidget_call.setHorizontalHeaderItem(idx, item)
-            elif idx == 18:
-                call_node_state['미결증감'] = False
-
-                item = QTableWidgetItem('OIΔ')
-                self.tableWidget_call.setHorizontalHeaderItem(idx, item)
+            if idx == 15:
+                self.call_db_check()
             else:
                 pass
 
-        print(call_node_state)
-
         self.tableWidget_call.resizeColumnsToContents()
         self.tableWidget_call.setColumnWidth(0, 15)
-
-        for i in range(call_scroll_begin_position, call_scroll_end_position):
-
-            # Clear Color
-            self.tableWidget_call.item(i, Option_column.기준가.value).setBackground(QBrush(기본바탕색))
-            self.tableWidget_call.item(i, Option_column.기준가.value).setForeground(QBrush(검정색))
-
-            self.tableWidget_call.item(i, Option_column.월저.value).setBackground(QBrush(기본바탕색))
-            self.tableWidget_call.item(i, Option_column.월저.value).setForeground(QBrush(검정색))
-
-            self.tableWidget_call.item(i, Option_column.월고.value).setBackground(QBrush(기본바탕색))
-            self.tableWidget_call.item(i, Option_column.월고.value).setForeground(QBrush(검정색))
-
-            self.tableWidget_call.item(i, Option_column.전저.value).setBackground(QBrush(기본바탕색))
-            self.tableWidget_call.item(i, Option_column.전저.value).setForeground(QBrush(검정색))
-
-            self.tableWidget_call.item(i, Option_column.전고.value).setBackground(QBrush(기본바탕색))
-            self.tableWidget_call.item(i, Option_column.전고.value).setForeground(QBrush(검정색))
-
-            self.tableWidget_call.item(i, Option_column.종가.value).setBackground(QBrush(기본바탕색))
-            self.tableWidget_call.item(i, Option_column.종가.value).setForeground(QBrush(검정색))
-
-            self.tableWidget_call.item(i, Option_column.피봇.value).setBackground(QBrush(기본바탕색))
-            self.tableWidget_call.item(i, Option_column.피봇.value).setForeground(QBrush(검정색))
-
-            self.tableWidget_call.item(i, Option_column.시가.value).setBackground(QBrush(기본바탕색))
-            self.tableWidget_call.item(i, Option_column.시가.value).setForeground(QBrush(검정색))
-
-            self.tableWidget_call.item(i, Option_column.저가.value).setBackground(QBrush(기본바탕색))
-            self.tableWidget_call.item(i, Option_column.저가.value).setForeground(QBrush(검정색))
-
-            self.tableWidget_call.item(i, Option_column.고가.value).setBackground(QBrush(기본바탕색))
-            self.tableWidget_call.item(i, Option_column.고가.value).setForeground(QBrush(검정색))
-
-        self.call_node_color_clear()
-        self.put_node_color_clear()
-
-        self.callnode_color_check()
-        self.putnode_color_check()
-
+        
         return
 
     @pyqtSlot(int)
     def _put_horizontal_header_clicked(self, idx):
 
         global put_node_state
-        global cm_put_종가, cm_put_종가_extend, cm_put_피봇, cm_put_피봇_extend, cm_put_시가, cm_put_시가_extend
-        global put_background_color1, put_foreground_color1, put_background_color2, put_foreground_color2
-        global put_background_color3, put_foreground_color3, put_background_color4, put_foreground_color4
-        global put_gap_percent, put_db_percent
 
-        col_text = self.tableWidget_put.horizontalHeaderItem(idx).text()
+        if idx == 3 or idx == 4 or idx == 5 or idx == 6 or idx == 7 or idx == 8 or idx == 9 or idx == 10:
 
-        if col_text.find(' √') == -1:
-            item = QTableWidgetItem(col_text + ' √')
-            self.tableWidget_put.setHorizontalHeaderItem(idx, item)
-            print("put header column.. ", idx, col_text)
+            col_text = self.tableWidget_put.horizontalHeaderItem(idx).text()
 
-            if idx == 3:
-                put_node_state['기준가'] = True
-            elif idx == 4:
-                put_node_state['월저'] = True
-            elif idx == 5:
-                put_node_state['월고'] = True
-            elif idx == 6:
-                put_node_state['전저'] = True
-            elif idx == 7:
-                put_node_state['전고'] = True
-            elif idx == 8:
-                put_node_state['종가'] = True
-            elif idx == 9:
-                put_node_state['피봇'] = True
-            elif idx == 10:
-                put_node_state['시가'] = True
+            if col_text.find(' √') == -1:
+                item = QTableWidgetItem(col_text + ' √')
+                self.tableWidget_put.setHorizontalHeaderItem(idx, item)
+                print("put header column.. ", idx, col_text)
 
-                #self.put_open_check()
-                #self.put_color_check()
-
-            elif idx == 15:
-                put_node_state['대비'] = True
-
-                self.put_db_check()
-
-            elif idx == 17:
-                put_node_state['미결'] = True
-
-            elif idx == 18:
-                put_node_state['미결증감'] = True
-
-                미결증감 = format(round(df_cm_put['미결증감'].mean()), ',') + ' √'
-
-                if 미결증감 != self.tableWidget_put.horizontalHeaderItem(Option_column.OID.value).text():
-                    item = QTableWidgetItem(미결증감)
-                    self.tableWidget_put.setHorizontalHeaderItem(Option_column.OID.value, item)
+                if idx == 3:
+                    put_node_state['기준가'] = True
+                elif idx == 4:
+                    put_node_state['월저'] = True
+                elif idx == 5:
+                    put_node_state['월고'] = True
+                elif idx == 6:
+                    put_node_state['전저'] = True
+                elif idx == 7:
+                    put_node_state['전고'] = True
+                elif idx == 8:
+                    put_node_state['종가'] = True
+                elif idx == 9:
+                    put_node_state['피봇'] = True
+                elif idx == 10:
+                    put_node_state['시가'] = True
                 else:
                     pass
             else:
-                pass
+                item = QTableWidgetItem(col_text.replace(' √', ''))
+                self.tableWidget_put.setHorizontalHeaderItem(idx, item)
+                print("put header column.. ", idx, col_text)
+
+                if idx == 3:
+                    put_node_state['기준가'] = False
+                elif idx == 4:
+                    put_node_state['월저'] = False
+                elif idx == 5:
+                    put_node_state['월고'] = False
+                elif idx == 6:
+                    put_node_state['전저'] = False
+                elif idx == 7:
+                    put_node_state['전고'] = False
+                elif idx == 8:
+                    put_node_state['종가'] = False
+                elif idx == 9:
+                    put_node_state['피봇'] = False
+                elif idx == 10:
+                    put_node_state['시가'] = False
+            
+            self.put_node_color_clear()
+            self.putnode_color_check()
         else:
-            item = QTableWidgetItem(col_text.replace(' √', ''))
-            self.tableWidget_put.setHorizontalHeaderItem(idx, item)
-            print("put header column.. ", idx, col_text)
-
-            if idx == 3:
-                put_node_state['기준가'] = False
-            elif idx == 4:
-                put_node_state['월저'] = False
-            elif idx == 5:
-                put_node_state['월고'] = False
-            elif idx == 6:
-                put_node_state['전저'] = False
-            elif idx == 7:
-                put_node_state['전고'] = False
-            elif idx == 8:
-                put_node_state['종가'] = False
-            elif idx == 9:
-                put_node_state['피봇'] = False
-            elif idx == 10:
-                put_node_state['시가'] = False
-
-            elif idx == 15:
-                put_node_state['대비'] = False
-
-            elif idx == 17:
-                put_node_state['미결'] = False
-
-                item = QTableWidgetItem('거래량')
-                self.tableWidget_put.setHorizontalHeaderItem(idx, item)
-
-            elif idx == 18:
-                put_node_state['미결증감'] = False
-
-                item = QTableWidgetItem('OIΔ')
-                self.tableWidget_put.setHorizontalHeaderItem(idx, item)
+            if idx == 15:
+                self.put_db_check()
             else:
                 pass
 
-        self.tableWidget_put.resizeColumnsToContents()
-        self.tableWidget_put.setColumnWidth(0, 15)
-
-        for i in range(put_scroll_begin_position, put_scroll_end_position):
-
-            # Clear Color
-            self.tableWidget_put.item(i, Option_column.기준가.value).setBackground(QBrush(기본바탕색))
-            self.tableWidget_put.item(i, Option_column.기준가.value).setForeground(QBrush(검정색))
-
-            self.tableWidget_put.item(i, Option_column.월저.value).setBackground(QBrush(기본바탕색))
-            self.tableWidget_put.item(i, Option_column.월저.value).setForeground(QBrush(검정색))
-
-            self.tableWidget_put.item(i, Option_column.월고.value).setBackground(QBrush(기본바탕색))
-            self.tableWidget_put.item(i, Option_column.월고.value).setForeground(QBrush(검정색))
-
-            self.tableWidget_put.item(i, Option_column.전저.value).setBackground(QBrush(기본바탕색))
-            self.tableWidget_put.item(i, Option_column.전저.value).setForeground(QBrush(검정색))
-
-            self.tableWidget_put.item(i, Option_column.전고.value).setBackground(QBrush(기본바탕색))
-            self.tableWidget_put.item(i, Option_column.전고.value).setForeground(QBrush(검정색))
-
-            self.tableWidget_put.item(i, Option_column.종가.value).setBackground(QBrush(기본바탕색))
-            self.tableWidget_put.item(i, Option_column.종가.value).setForeground(QBrush(검정색))
-
-            self.tableWidget_put.item(i, Option_column.피봇.value).setBackground(QBrush(기본바탕색))
-            self.tableWidget_put.item(i, Option_column.피봇.value).setForeground(QBrush(검정색))
-
-            self.tableWidget_put.item(i, Option_column.시가.value).setBackground(QBrush(기본바탕색))
-            self.tableWidget_put.item(i, Option_column.시가.value).setForeground(QBrush(검정색))
-
-            self.tableWidget_put.item(i, Option_column.저가.value).setBackground(QBrush(기본바탕색))
-            self.tableWidget_put.item(i, Option_column.저가.value).setForeground(QBrush(검정색))
-
-            self.tableWidget_put.item(i, Option_column.고가.value).setBackground(QBrush(기본바탕색))
-            self.tableWidget_put.item(i, Option_column.고가.value).setForeground(QBrush(검정색))
-
-        self.call_node_color_clear()
-        self.put_node_color_clear()
-
-        self.putnode_color_check()
-        self.callnode_color_check()
-
+        self.tableWidget_call.resizeColumnsToContents()
+        self.tableWidget_call.setColumnWidth(0, 15)
+        
         return
 
     @pyqtSlot(int)
@@ -3524,8 +3380,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                         if dt.second in every_0sec and not self.alternate_flag:
 
-                            str = '[{0:02d}:{1:02d}:{2:02d}] 대비 갱신합니다.\r'.format(delta_hour, delta_minute, delta_sec)
-                            self.textBrowser.append(str)
+                            #str = '[{0:02d}:{1:02d}:{2:02d}] 대비 갱신합니다.\r'.format(delta_hour, delta_minute, delta_sec)
+                            #self.textBrowser.append(str)
 
                             self.call_db_check()
                             self.put_db_check()
@@ -3993,8 +3849,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
         if call_db_percent_local:
             tmp = np.array(call_db_percent_local)
+            sum = df_cm_call['대비'].sum() 
             mean = int(round(np.mean(tmp), 1))
-            call_str = repr(mean) + '%' + ' √'
+            call_str = repr(sum) + '(' + repr(mean) + '%' + ')'
 
             if call_str != self.tableWidget_call.horizontalHeaderItem(Option_column.대비.value).text():
                 item = QTableWidgetItem(call_str)
@@ -4003,6 +3860,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 self.tableWidget_call.setColumnWidth(0, 15)
             else:
                 pass
+
+            str = '[{0:02d}:{1:02d}:{2:02d}] Call 대비 갱신합니다.\r'.format(delta_hour, delta_minute, delta_sec)
+            self.textBrowser.append(str)
         else:
             print('call_db_percent_local is empty...')
 
@@ -4196,8 +4056,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
         if put_db_percent_local:
             tmp = np.array(put_db_percent_local)
+            sum = df_cm_put['대비'].sum()
             mean = int(round(np.mean(tmp), 1))
-            put_str = repr(mean) + '%' + ' √'
+            put_str = repr(sum) + '(' + repr(mean) + '%' + ')'
 
             if put_str != self.tableWidget_put.horizontalHeaderItem(Option_column.대비.value).text():
                 item = QTableWidgetItem(put_str)
@@ -4206,6 +4067,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 self.tableWidget_put.setColumnWidth(0, 15)
             else:
                 pass
+
+            str = '[{0:02d}:{1:02d}:{2:02d}] Put 대비 갱신합니다.\r'.format(delta_hour, delta_minute, delta_sec)
+            self.textBrowser.append(str)
         else:
             print('put_db_percent_local is empty...')
 
