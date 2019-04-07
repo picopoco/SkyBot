@@ -1,46 +1,60 @@
 # -*- coding: utf-8 -*-
 
-import sys
-import os
-import datetime
-import time
-# import win32com.client
-# import pythoncom
-# import inspect
+프로그램정보 = [
+    ['프로그램명','mymoneybot-eBEST'],
+    ['Version','1.4'],
+    ['개발일','2018-02-28'],
+    ['2018-06-04','포트폴리오 더블클릭으로 삭제 기능 추가'],
+    ['2018-05-23','시장가매도, query->ActiveX 오류수정'],
+    ['2018-07-19','국내선물옵션, 해외선물옵션에 필요한 모듈을 XAQuery, XAReals에 추가'],
+    ['2018-07-19','검색식에서 종목이 빠지는 경우, 손절 및 익절이 나가지 않는 부분 추가'],
+    ['2018-07-20','체결시간과 종목검색에서 종목이 빠지는 시간차가 있는 경우 주문이 나가지 않는 부분추가'],
+    ['2018-07-25','종목검색 중지시 계속 검색된 종목이 들어오는 문제 수정'],
+    ['2018-08-01','종목검색, Chartindex에서 식별자를 사용하는 방법 통일'],
+    ['2018-08-01','한번에 수량이 다 체결된 경우 포트에 반영되지 않는 것을 수정'],
+    ['2018-08-07','조건검색시 다른 조건검색과 섞이는 것을 수정'],
+    ['2018-08-07','API메뉴중 백업에 OnReceiveMessage 추가']
+]
+
+import sys, os
+import datetime, time
+import win32com.client
+import pythoncom
+import inspect
 
 import pickle
-# import uuid
-# import base64
-# import subprocess
-# from subprocess import Popen
+import uuid
+import base64
+import subprocess
+from subprocess import Popen
 import webbrowser
 
+import PyQt5
 from PyQt5 import QtCore, QtGui, uic
-from PyQt5.QtCore import *
+from PyQt5 import QAxContainer
 from PyQt5.QtGui import *
+from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
-
-# from PyQt5.QtCore import Qt, QAbstractTableModel, QModelIndex, QThread, QTimer
-# from PyQt5.QtGui import QBrush, QColor, QFont, QIcon, QPixmap
-# from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QMessageBox
-# from PyQt5 import QAxContainer
-# from PyQt5.QAxContainer import *
-# from PyQt5.QtTest import QTest
+from PyQt5.QtWidgets import QApplication, QLabel, QLineEdit, QMainWindow, QDialog, QMessageBox, QProgressBar
+from PyQt5.QtGui import QPainter, QColor, QPen
+from PyQt5.QAxContainer import *
+from PyQt5.QtTest import QTest
 
 import numpy as np
-from numpy import NaN
+from numpy import NaN, Inf, arange, isscalar, asarray, array
 
 import pandas as pd
 import pandas.io.sql as pdsql
 from pandas import DataFrame, Series
 
 import sqlite3
+
 import logging
 import logging.handlers
 
 # import threading
-# from threading import Timer
-# from multiprocessing import Pool, Process, Queue
+from threading import Timer
+from multiprocessing import Pool, Process, Queue
 
 from XASessions import *
 from XAQueries import *
@@ -48,10 +62,8 @@ from XAReals import *
 
 from FileWatcher import *
 from Utils import *
-import ctypes
 
-# from apscheduler.jobstores.base import JobLookupError
-# from apscheduler.schedulers.background import BackgroundScheduler
+import ctypes
 
 from enum import Enum
 import timeit
@@ -62,22 +74,6 @@ import collections
 from PIL import ImageGrab
 import win32gui
 import copy
-
-프로그램정보 = [
-    ['프로그램명', 'mymoneybot-eBEST'],
-    ['Version', '1.4'],
-    ['개발일', '2018-02-28'],
-    ['2018-06-04', '포트폴리오 더블클릭으로 삭제 기능 추가'],
-    ['2018-05-23', '시장가매도, query->ActiveX 오류수정'],
-    ['2018-07-19', '국내선물옵션, 해외선물옵션에 필요한 모듈을 XAQuery, XAReals에 추가'],
-    ['2018-07-19', '검색식에서 종목이 빠지는 경우, 손절 및 익절이 나가지 않는 부분 추가'],
-    ['2018-07-20', '체결시간과 종목검색에서 종목이 빠지는 시간차가 있는 경우 주문이 나가지 않는 부분추가'],
-    ['2018-07-25', '종목검색 중지시 계속 검색된 종목이 들어오는 문제 수정'],
-    ['2018-08-01', '종목검색, Chartindex에서 식별자를 사용하는 방법 통일'],
-    ['2018-08-01', '한번에 수량이 다 체결된 경우 포트에 반영되지 않는 것을 수정'],
-    ['2018-08-07', '조건검색시 다른 조건검색과 섞이는 것을 수정'],
-    ['2018-08-07', 'API메뉴중 백업에 OnReceiveMessage 추가']
-]
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.expand_frame_repr', False)
