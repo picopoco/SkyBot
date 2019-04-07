@@ -2660,26 +2660,26 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
         comboindex2 = self.comboBox2.currentIndex()
 
         if comboindex2 == 0:
-
-            for i in range(9):
-                mv_line[i].setValue(0)
-                call_curve[i].clear()
-                put_curve[i].clear()                
             
             cm_call_oi_right_curve.clear()
             cm_put_oi_right_curve.clear()
+            
+            for i in range(9):
+                mv_line[i].setValue(0)
+                call_curve[i].clear()
+                put_curve[i].clear()    
 
             #self.Plot_Opt.setRange(yRange=[-100, 100], padding=0)
 
         elif comboindex2 == 1:
 
+            cm_call_volume_right_curve.clear()
+            cm_put_volume_right_curve.clear()
+            
             for i in range(9):
                 mv_line[i].setValue(0)
                 call_curve[i].clear()
                 put_curve[i].clear()
-
-            cm_call_volume_right_curve.clear()
-            cm_put_volume_right_curve.clear()
 
             #self.Plot_Opt.setRange(yRange=[-100, 100], padding=0)
 
@@ -2692,6 +2692,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
             #self.Plot_Opt.setRange(yRange=[0, 6], padding=0)
 
+            # 대맥점 표시
             mv_line[0].setValue(1.2)
             mv_line[1].setValue(2.5)
             mv_line[2].setValue(3.5)
@@ -3429,20 +3430,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 curve3_data = infos[4]
                 curve4_data = infos[5]
             
-            # 오른쪽 그래프 선택 및 그리기
-            if comboindex2 == 0:
-
-                cm_call_volume_right_curve.setData(curve3_data)
-                cm_put_volume_right_curve.setData(curve4_data)
-
-            elif comboindex2 == 1:
-
-                cm_call_oi_right_curve.setData(curve3_data)
-                cm_put_oi_right_curve.setData(curve4_data)
-            else:
-                pass
-            
-            # 왼쪽 그래프 선택 및 그리기
+            # 선택된 왼쪽 그래프 그리기
             if comboindex1 == 0:
 
                 cm_call_oi_curve.setData(curve1_data)
@@ -3454,7 +3442,20 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 cm_put_volume_curve.setData(curve2_data)
             else:
                 kp200_curve.setData(curve1_data)
-                fut_curve.setData(curve2_data)           
+                fut_curve.setData(curve2_data)   
+            
+            # 선택된 오른쪽 그래프 그리기
+            if comboindex2 == 0:
+
+                cm_call_volume_right_curve.setData(curve3_data)
+                cm_put_volume_right_curve.setData(curve4_data)
+
+            elif comboindex2 == 1:
+
+                cm_call_oi_right_curve.setData(curve3_data)
+                cm_put_oi_right_curve.setData(curve4_data)
+            else:
+                pass                    
 
             str = '[{0:02d}:{1:02d}:{2:02d}] Plot Update 처리시간 : {3:0.2f} ms...\r'.format(delta_hour, delta_minute, delta_sec, (timeit.default_timer() - start_time) * 1000)
             #print(str)
@@ -9650,7 +9651,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 		
         if float(result['현재가']) <= df_cm_call.iloc[index]['시가갭']:
 
-            수정거래량 = result['누적거래량'] * float(result['현재가'])
+            #수정거래량 = result['누적거래량'] * float(result['현재가'])
+            수정거래량 = (result['매수누적체결량'] - result['매도누적체결량']) * float(result['현재가'])
             매도누적체결량 = result['매도누적체결량'] * float(result['현재가'])
             매수누적체결량 = result['매수누적체결량'] * float(result['현재가'])
             미결 = result['미결제약정수량'] * float(result['현재가'])
@@ -9663,7 +9665,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             else:
                 pass
         else:
-            수정거래량 = result['누적거래량'] * (float(result['현재가']) - df_cm_call.iloc[index]['시가갭'])
+            #수정거래량 = result['누적거래량'] * (float(result['현재가']) - df_cm_call.iloc[index]['시가갭'])
+            수정거래량 = (result['매수누적체결량'] - result['매도누적체결량']) * (float(result['현재가']) - df_cm_call.iloc[index]['시가갭'])
             매도누적체결량 = result['매도누적체결량'] * (float(result['현재가']) - df_cm_call.iloc[index]['시가갭'])
             매수누적체결량 = result['매수누적체결량'] * (float(result['현재가']) - df_cm_call.iloc[index]['시가갭'])
             미결 = result['미결제약정수량'] * (float(result['현재가']) - df_cm_call.iloc[index]['시가갭'])
@@ -10046,7 +10049,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
         df_cm_call.loc[index, '거래량'] = call_result['누적거래량']
 
-        if comboindex1 == 1:
+        if comboindex2 == 0:
 
             temp = format(df_cm_call.iloc[index]['수정거래량'], ',')
 
@@ -10246,7 +10249,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 		
         if float(result['현재가']) <= df_cm_put.iloc[index]['시가갭']:
 
-            수정거래량 = result['누적거래량'] * float(result['현재가'])
+            #수정거래량 = result['누적거래량'] * float(result['현재가'])
+            수정거래량 = (result['매수누적체결량'] - result['매도누적체결량']) * float(result['현재가'])
             매도누적체결량 = result['매도누적체결량'] * float(result['현재가'])
             매수누적체결량 = result['매수누적체결량'] * float(result['현재가'])
             미결 = result['미결제약정수량'] * float(result['현재가'])
@@ -10259,7 +10263,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             else:
                 pass
         else:
-            수정거래량 = result['누적거래량'] * (float(result['현재가']) - df_cm_put.iloc[index]['시가갭'])
+            #수정거래량 = result['누적거래량'] * (float(result['현재가']) - df_cm_put.iloc[index]['시가갭'])
+            수정거래량 = (result['매수누적체결량'] - result['매도누적체결량']) * (float(result['현재가']) - df_cm_put.iloc[index]['시가갭'])
             매도누적체결량 = result['매도누적체결량'] * (float(result['현재가']) - df_cm_put.iloc[index]['시가갭'])
             매수누적체결량 = result['매수누적체결량'] * (float(result['현재가']) - df_cm_put.iloc[index]['시가갭'])
             미결 = result['미결제약정수량'] * (float(result['현재가']) - df_cm_put.iloc[index]['시가갭'])
@@ -10649,7 +10654,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
         df_cm_put.loc[index, '거래량'] = put_result['누적거래량']
 
-        if comboindex1 == 1:
+        if comboindex2 == 0:
 
             temp = format(df_cm_put.iloc[index]['수정거래량'], ',')
 
@@ -10870,8 +10875,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
         temp = (call_quote['매수잔량'] + call_quote['매도잔량']) - (put_quote['매수잔량'] + put_quote['매도잔량'])
         잔량차 = format(temp, ',')
 
-        item_str = "{0:0.2f}/{1:0.2f}\n({2}/{3})".format(abs(call_count_ratio - put_count_ratio),
-                                                         abs(call_remainder_ratio - put_remainder_ratio),
+        item_str = "{0:0.2f}/{1:0.2f}\n({2}/{3})".format(call_count_ratio - put_count_ratio,
+                                                         call_remainder_ratio - put_remainder_ratio,
                                                          건수차, 잔량차)
 
         if item_str != self.tableWidget_quote.item(0, 12).text():
