@@ -10049,7 +10049,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
         df_cm_call.loc[index, '거래량'] = call_result['누적거래량']
 
-        if comboindex2 == 0:
+        if comboindex1 == 1:
 
             temp = format(df_cm_call.iloc[index]['수정거래량'], ',')
 
@@ -10654,7 +10654,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
         df_cm_put.loc[index, '거래량'] = put_result['누적거래량']
 
-        if comboindex2 == 0:
+        if comboindex1 == 1:
 
             temp = format(df_cm_put.iloc[index]['수정거래량'], ',')
 
