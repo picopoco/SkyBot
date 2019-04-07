@@ -2220,7 +2220,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
         self.tableWidget_call.setRowCount(nRowCount)
         self.tableWidget_call.setColumnCount(Option_column.OID.value + 1)
         self.tableWidget_call.setHorizontalHeaderLabels(['▲', '행사가', '↑/↓', '기준가', '월저', '월고', '전저', '전고', 
-        '종가 √', '피봇 √', '시가 √', '시가갭', '저가', '현재가', '고가', '대비', '진폭', '∑(미결or거래량)', 'OIΔ'])
+        '종가 √', '피봇 √', '시가 √', '시가갭', '저가', '현재가', '고가', '대비', '진폭', '∑(미결 or 체결량)', 'OIΔ'])
         self.tableWidget_call.verticalHeader().setVisible(False)
         self.tableWidget_call.clearContents()
 
@@ -2239,7 +2239,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
         self.tableWidget_put.setRowCount(nRowCount)
         self.tableWidget_put.setColumnCount(Option_column.OID.value + 1)
         self.tableWidget_put.setHorizontalHeaderLabels(['▼', '행사가', '↑/↓', '기준가', '월저', '월고', '전저', '전고', 
-        '종가 √', '피봇 √', '시가 √', '시가갭', '저가', '현재가', '고가', '대비', '진폭', '∑(미결or거래량)', 'OIΔ'])
+        '종가 √', '피봇 √', '시가 √', '시가갭', '저가', '현재가', '고가', '대비', '진폭', '∑(미결 or 체결량)', 'OIΔ'])
         self.tableWidget_put.verticalHeader().setVisible(False)
         self.tableWidget_put.clearContents()
 
@@ -2589,20 +2589,20 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             volume_base_line.setValue(0)
 
             for i in range(nCount_cm_option_pairs):
-                temp = format(df_cm_call.iloc[i]['수정거래량'], ',')
+                temp = format(df_cm_call.iloc[i]['순매수체결량'], ',')
 
                 item = QTableWidgetItem(temp)
                 item.setTextAlignment(Qt.AlignCenter)
                 self.tableWidget_call.setItem(i, Option_column.OI.value, item)
 
-                temp = format(df_cm_put.iloc[i]['수정거래량'], ',')
+                temp = format(df_cm_put.iloc[i]['순매수체결량'], ',')
 
                 item = QTableWidgetItem(temp)
                 item.setTextAlignment(Qt.AlignCenter)
                 self.tableWidget_put.setItem(i, Option_column.OI.value, item)
 
-            call_temp = format(df_cm_call['수정거래량'].sum(), ',')
-            put_temp = format(df_cm_put['수정거래량'].sum(), ',')
+            call_temp = format(df_cm_call['순매수체결량'].sum(), ',')
+            put_temp = format(df_cm_put['순매수체결량'].sum(), ',')
 
         else:
 
@@ -7592,7 +7592,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                     미결 = int(df['미결제약정'][i] * (df['현재가'][i] - 시가갭))
                     거래량 = df['거래량'][i]
-                    수정거래량 = int(df['거래량'][i] * (df['현재가'][i] - 시가갭))
+                    순매수체결량 = int(df['거래량'][i] * (df['현재가'][i] - 시가갭))
 
                     if pre_start:
 
@@ -7600,7 +7600,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     else:
                         if comboindex1 == 1:
 
-                            temp = format(수정거래량, ',')
+                            temp = format(순매수체결량, ',')
                         else:
                             temp = format(미결, ',')
 
@@ -7639,7 +7639,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     월고 = 0.0
 
                     lst = [단축코드, 체결시간, 행사가, OLOH, 기준가, 월저, 월고, 전저, 전고, 종가, 피봇, 시가, 시가갭, 저가, 현재가,
-                           고가, 대비, 진폭, 거래량, 수정거래량, 미결, 미결증감]
+                           고가, 대비, 진폭, 거래량, 순매수체결량, 미결, 미결증감]
                     call_result.append(lst)
 
                     매도누적체결량 = 0
@@ -7659,7 +7659,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     callho_result.append(lstho)
 
                 columns = ['단축코드', '체결시간', '행사가', 'OLOH', '기준가', '월저', '월고', '전저', '전고', '종가', '피봇', '시가', '시가갭', '저가',
-                           '현재가', '고가', '대비', '진폭', '거래량', '수정거래량', '미결', '미결증감']
+                           '현재가', '고가', '대비', '진폭', '거래량', '순매수체결량', '미결', '미결증감']
 
                 df_cm_call = DataFrame(data=call_result, columns=columns)
 
@@ -7681,7 +7681,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 else:
                     if comboindex1 == 1:
 
-                        temp = format(df_cm_call['수정거래량'].sum(), ',')
+                        temp = format(df_cm_call['순매수체결량'].sum(), ',')
                     else:
                         temp = format(df_cm_call['미결'].sum(), ',')
                     
@@ -7864,7 +7864,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                     미결 = int(df1['미결제약정'][i] * (df1['현재가'][i] - 시가갭))
                     거래량 = df1['거래량'][i]
-                    수정거래량 = int(df1['거래량'][i] * (df1['현재가'][i] - 시가갭))
+                    순매수체결량 = int(df1['거래량'][i] * (df1['현재가'][i] - 시가갭))
 
                     if pre_start:
 
@@ -7872,7 +7872,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     else:
                         if comboindex1 == 1:
 
-                            temp = format(수정거래량, ',')
+                            temp = format(순매수체결량, ',')
                         else:
                             temp = format(미결, ',')                        
 
@@ -7912,7 +7912,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     월고 = 0.0
 
                     lst = [단축코드, 체결시간, 행사가, OLOH, 기준가, 월저, 월고, 전저, 전고, 종가, 피봇, 시가, 시가갭, 저가, 현재가,
-                           고가, 대비, 진폭, 거래량, 수정거래량, 미결, 미결증감]
+                           고가, 대비, 진폭, 거래량, 순매수체결량, 미결, 미결증감]
                     put_result.append(lst)
 
                     매도누적체결량 = 0
@@ -7932,7 +7932,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     putho_result.append(lstho)
 
                 columns = ['단축코드', '체결시간', '행사가', 'OLOH', '기준가', '월저', '월고', '전저', '전고', '종가', '피봇', '시가', '시가갭', '저가',
-                           '현재가', '고가', '대비', '진폭', '거래량', '수정거래량', '미결', '미결증감']
+                           '현재가', '고가', '대비', '진폭', '거래량', '순매수체결량', '미결', '미결증감']
 
                 df_cm_put = DataFrame(data=put_result, columns=columns)
 
@@ -7954,7 +7954,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 else:
                     if comboindex1 == 1:
 
-                        temp = format(df_cm_put['수정거래량'].sum(), ',')
+                        temp = format(df_cm_put['순매수체결량'].sum(), ',')
                     else:
                         temp = format(df_cm_put['미결'].sum(), ',')                    
 
@@ -8007,7 +8007,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                 else:
                     pass
 
-                # 수정거래량 차 구하기
+                # 순매수체결량 차 구하기
                 '''
                 temp = call_volume_total - put_volume_total
 
@@ -8507,9 +8507,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                 for i in range(nCount_cm_option_pairs):
 
-                    # 수정거래량 초기화
-                    df_cm_call.loc[i, '수정거래량'] = 0
-                    df_cm_put.loc[i, '수정거래량'] = 0
+                    # 순매수체결량 초기화
+                    df_cm_call.loc[i, '순매수체결량'] = 0
+                    df_cm_put.loc[i, '순매수체결량'] = 0
 
                     # Call 처리
                     item = QTableWidgetItem("{0}".format(''))
@@ -8678,12 +8678,12 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     else:
                         pass
 
-                    수정거래량 = int(df['거래량'][i] * (df['현재가'][i] - 시가갭))
-                    df_cm_call.loc[i, '수정거래량'] = 수정거래량
+                    순매수체결량 = int(df['거래량'][i] * (df['현재가'][i] - 시가갭))
+                    df_cm_call.loc[i, '순매수체결량'] = 순매수체결량
                     # t2835에 미결항목이 없음
                     df_cm_call.loc[i, '미결'] = 0
 
-                    temp = format(수정거래량, ',')
+                    temp = format(순매수체결량, ',')
 
                     item = QTableWidgetItem(temp)
                     item.setTextAlignment(Qt.AlignCenter)
@@ -8865,12 +8865,12 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     else:
                         pass
 
-                    수정거래량 = int(df1['거래량'][i] * (df1['현재가'][i] - 시가갭))
-                    df_cm_put.loc[i, '수정거래량'] = 수정거래량
+                    순매수체결량 = int(df1['거래량'][i] * (df1['현재가'][i] - 시가갭))
+                    df_cm_put.loc[i, '순매수체결량'] = 순매수체결량
                     # t2835에 미결항목이 없음
                     df_cm_put.loc[i, '미결'] = 0
 
-                    temp = format(수정거래량, ',')
+                    temp = format(순매수체결량, ',')
 
                     item = QTableWidgetItem(temp)
                     item.setTextAlignment(Qt.AlignCenter)
@@ -9103,8 +9103,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             self.tableWidget_put.resizeColumnsToContents()
             self.tableWidget_put.setColumnWidth(0, 15)
 
-            call_volume_total = df_cm_call['수정거래량'].sum()
-            put_volume_total = df_cm_put['수정거래량'].sum()
+            call_volume_total = df_cm_call['순매수체결량'].sum()
+            put_volume_total = df_cm_put['순매수체결량'].sum()
 
             self.call_open_check()
             self.call_db_check()
@@ -9555,12 +9555,13 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     if pre_start:
 
                         for i in range(nCount_cm_option_pairs):
-                            수정거래량 = 0
 
-                            df_cm_call.loc[i, '수정거래량'] = 수정거래량
-                            df_cm_put.loc[i, '수정거래량'] = 수정거래량
+                            순매수체결량 = 0
 
-                            temp = format(수정거래량, ',')
+                            df_cm_call.loc[i, '순매수체결량'] = 순매수체결량
+                            df_cm_put.loc[i, '순매수체결량'] = 순매수체결량
+
+                            temp = format(순매수체결량, ',')
 
                             item = QTableWidgetItem(temp)
                             item.setTextAlignment(Qt.AlignCenter)
@@ -9570,7 +9571,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                             item.setTextAlignment(Qt.AlignCenter)
                             self.tableWidget_put.setItem(i, Option_column.OI.value, item)
 
-                        str = '[{0:02d}:{1:02d}:{2:02d}] 수정거래량을 초기화합니다.\r'.format(dt.hour, dt.minute,
+                        str = '[{0:02d}:{1:02d}:{2:02d}] 순매수체결량을 초기화합니다.\r'.format(dt.hour, dt.minute,
                                                                                   dt.second)
                         self.textBrowser.append(str)
                     else:
@@ -9651,8 +9652,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 		
         if float(result['현재가']) <= df_cm_call.iloc[index]['시가갭']:
 
-            #수정거래량 = result['누적거래량'] * float(result['현재가'])
-            수정거래량 = (result['매수누적체결량'] - result['매도누적체결량']) * float(result['현재가'])
+            #순매수체결량 = result['누적거래량'] * float(result['현재가'])
+            순매수체결량 = (result['매수누적체결량'] - result['매도누적체결량']) * float(result['현재가'])
             매도누적체결량 = result['매도누적체결량'] * float(result['현재가'])
             매수누적체결량 = result['매수누적체결량'] * float(result['현재가'])
             미결 = result['미결제약정수량'] * float(result['현재가'])
@@ -9665,8 +9666,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             else:
                 pass
         else:
-            #수정거래량 = result['누적거래량'] * (float(result['현재가']) - df_cm_call.iloc[index]['시가갭'])
-            수정거래량 = (result['매수누적체결량'] - result['매도누적체결량']) * (float(result['현재가']) - df_cm_call.iloc[index]['시가갭'])
+            #순매수체결량 = result['누적거래량'] * (float(result['현재가']) - df_cm_call.iloc[index]['시가갭'])
+            순매수체결량 = (result['매수누적체결량'] - result['매도누적체결량']) * (float(result['현재가']) - df_cm_call.iloc[index]['시가갭'])
             매도누적체결량 = result['매도누적체결량'] * (float(result['현재가']) - df_cm_call.iloc[index]['시가갭'])
             매수누적체결량 = result['매수누적체결량'] * (float(result['현재가']) - df_cm_call.iloc[index]['시가갭'])
             미결 = result['미결제약정수량'] * (float(result['현재가']) - df_cm_call.iloc[index]['시가갭'])
@@ -9679,9 +9680,9 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             else:
                 pass
 
-            df_cm_call.loc[index, '수정거래량'] = int(수정거래량)
-            #df_plotdata_cm_call_volume.iloc[0][opt_x_idx + 1] = df_cm_call['수정거래량'].sum()
-            #call_volume_total = df_cm_call['수정거래량'].sum()
+            df_cm_call.loc[index, '순매수체결량'] = int(순매수체결량)
+            #df_plotdata_cm_call_volume.iloc[0][opt_x_idx + 1] = df_cm_call['순매수체결량'].sum()
+            #call_volume_total = df_cm_call['순매수체결량'].sum()
 
             df_cm_call.loc[index, '미결'] = int(미결)
             df_cm_call.loc[index, '미결증감'] = int(미결증감)
@@ -10051,14 +10052,14 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
         if comboindex1 == 1:
 
-            temp = format(df_cm_call.iloc[index]['수정거래량'], ',')
+            temp = format(df_cm_call.iloc[index]['순매수체결량'], ',')
 
             if temp != self.tableWidget_call.item(index, Option_column.OI.value).text():
 
                 item = QTableWidgetItem(temp)
                 item.setTextAlignment(Qt.AlignCenter)
 
-                if index == df_cm_call['수정거래량'].idxmax():
+                if index == df_cm_call['순매수체결량'].idxmax():
                     item.setBackground(QBrush(녹색))
                 else:
                     item.setBackground(QBrush(기본바탕색))
@@ -10249,8 +10250,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 		
         if float(result['현재가']) <= df_cm_put.iloc[index]['시가갭']:
 
-            #수정거래량 = result['누적거래량'] * float(result['현재가'])
-            수정거래량 = (result['매수누적체결량'] - result['매도누적체결량']) * float(result['현재가'])
+            #순매수체결량 = result['누적거래량'] * float(result['현재가'])
+            순매수체결량 = (result['매수누적체결량'] - result['매도누적체결량']) * float(result['현재가'])
             매도누적체결량 = result['매도누적체결량'] * float(result['현재가'])
             매수누적체결량 = result['매수누적체결량'] * float(result['현재가'])
             미결 = result['미결제약정수량'] * float(result['현재가'])
@@ -10263,8 +10264,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             else:
                 pass
         else:
-            #수정거래량 = result['누적거래량'] * (float(result['현재가']) - df_cm_put.iloc[index]['시가갭'])
-            수정거래량 = (result['매수누적체결량'] - result['매도누적체결량']) * (float(result['현재가']) - df_cm_put.iloc[index]['시가갭'])
+            #순매수체결량 = result['누적거래량'] * (float(result['현재가']) - df_cm_put.iloc[index]['시가갭'])
+            순매수체결량 = (result['매수누적체결량'] - result['매도누적체결량']) * (float(result['현재가']) - df_cm_put.iloc[index]['시가갭'])
             매도누적체결량 = result['매도누적체결량'] * (float(result['현재가']) - df_cm_put.iloc[index]['시가갭'])
             매수누적체결량 = result['매수누적체결량'] * (float(result['현재가']) - df_cm_put.iloc[index]['시가갭'])
             미결 = result['미결제약정수량'] * (float(result['현재가']) - df_cm_put.iloc[index]['시가갭'])
@@ -10277,11 +10278,11 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             else:
                 pass
 
-            df_cm_put.loc[index, '수정거래량'] = int(수정거래량)
+            df_cm_put.loc[index, '순매수체결량'] = int(순매수체결량)
 
-            #df_plotdata_cm_put_volume.iloc[0][opt_x_idx + 1] = df_cm_put['수정거래량'].sum()
-            #df_plotdata_cm_volume_cha.iloc[0][opt_x_idx + 1] = df_cm_call['수정거래량'].sum() - df_cm_put['수정거래량'].sum()
-            #put_volume_total = df_cm_put['수정거래량'].sum()
+            #df_plotdata_cm_put_volume.iloc[0][opt_x_idx + 1] = df_cm_put['순매수체결량'].sum()
+            #df_plotdata_cm_volume_cha.iloc[0][opt_x_idx + 1] = df_cm_call['순매수체결량'].sum() - df_cm_put['순매수체결량'].sum()
+            #put_volume_total = df_cm_put['순매수체결량'].sum()
 
             df_cm_put.loc[index, '미결'] = int(미결)
             df_cm_put.loc[index, '미결증감'] = int(미결증감)
@@ -10656,14 +10657,14 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
         if comboindex1 == 1:
 
-            temp = format(df_cm_put.iloc[index]['수정거래량'], ',')
+            temp = format(df_cm_put.iloc[index]['순매수체결량'], ',')
 
             if temp != self.tableWidget_put.item(index, Option_column.OI.value).text():
 
                 item = QTableWidgetItem(temp)
                 item.setTextAlignment(Qt.AlignCenter)
 
-                if index == df_cm_put['수정거래량'].idxmax():
+                if index == df_cm_put['순매수체결량'].idxmax():
                     item.setBackground(QBrush(녹색))
                 else:
                     item.setBackground(QBrush(기본바탕색))
