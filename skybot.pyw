@@ -88,6 +88,7 @@ UI_DIR = "UI\\"
 ########################################################################################################################
 time_delta = 0
 START_ON = False
+service_time_start = False
 nRowCount = 99
 Option_column = Enum('Option_column', '행사가 OLOH 기준가 월저 월고 전저 전고 종가 피봇 시가 시가갭 저가 현재가 고가 대비 진폭 OI OID')
 Option_che_column = Enum('Option_che_column', '매도누적체결량 매도누적체결건수 매수누적체결량 매수누적체결건수')
@@ -3173,6 +3174,10 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                         if cm_call_저가 != 콜저가리스트:
 
                             콜저가리스트 = copy.deepcopy(cm_call_저가)
+
+                            self.call_node_color_clear()
+                            self.put_node_color_clear()                            
+                            self.put_high_update_color_check()
                             self.call_low_update_color_check()
                         else:
                             pass
@@ -3180,6 +3185,10 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                         if cm_call_고가 != 콜고가리스트:
 
                             콜고가리스트 = copy.deepcopy(cm_call_고가)
+
+                            self.call_node_color_clear()
+                            self.put_node_color_clear()
+                            self.put_low_update_color_check() 
                             self.call_high_update_color_check()
                         else:
                             pass
@@ -3191,6 +3200,10 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                         if cm_put_저가 != 풋저가리스트:
 
                             풋저가리스트 = copy.deepcopy(cm_put_저가)
+
+                            self.call_node_color_clear()
+                            self.put_node_color_clear()
+                            self.call_high_update_color_check()
                             self.put_low_update_color_check()
                         else:
                             pass
@@ -3198,6 +3211,10 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                         if cm_put_고가 != 풋고가리스트:
 
                             풋고가리스트 = copy.deepcopy(cm_put_고가)
+
+                            self.call_node_color_clear()
+                            self.put_node_color_clear()
+                            self.call_low_update_color_check()
                             self.put_high_update_color_check()
                         else:
                             pass
@@ -3311,6 +3328,12 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                         self.call_open_check()
                         self.put_open_check()
+                        '''
+                        self.call_node_color_clear()
+                        self.put_node_color_clear()
+                        self.callnode_color_check()
+                        self.putnode_color_check()
+                        '''
                     else:
                         pass
                 else:
@@ -3429,8 +3452,15 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             # 선택된 왼쪽 그래프 그리기
             if comboindex1 == 0:
 
-                cm_call_oi_curve.setData(curve1_data)
-                cm_put_oi_curve.setData(curve2_data)
+                if curve1_data[-1] > 0 and curve3_data[-1] > 0 and curve2_data[-1] < 0 and curve4_data[-1] < 0:
+                    cm_call_oi_curve.setData(curve1_data, pen=magenta_pen)
+                    cm_put_oi_curve.setData(curve2_data, pen=aqua_pen)
+                elif curve1_data[-1] < 0 and curve3_data[-1] < 0 and curve2_data[-1] > 0 and curve4_data[-1] > 0:
+                    cm_call_oi_curve.setData(curve1_data, pen=magenta_pen)
+                    cm_put_oi_curve.setData(curve2_data, pen=aqua_pen)
+                else:
+                    cm_call_oi_curve.setData(curve1_data, pen=rpen)
+                    cm_put_oi_curve.setData(curve2_data, pen=bpen)
 
             elif comboindex1 == 1:
                 
@@ -3443,8 +3473,15 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
             # 선택된 오른쪽 그래프 그리기
             if comboindex2 == 0:
 
-                cm_call_volume_right_curve.setData(curve3_data)
-                cm_put_volume_right_curve.setData(curve4_data)
+                if curve1_data[-1] > 0 and curve3_data[-1] > 0 and curve2_data[-1] < 0 and curve4_data[-1] < 0:
+                    cm_call_volume_right_curve.setData(curve3_data, pen=magenta_pen)
+                    cm_put_volume_right_curve.setData(curve4_data, pen=aqua_pen)
+                elif curve1_data[-1] < 0 and curve3_data[-1] < 0 and curve2_data[-1] > 0 and curve4_data[-1] > 0:
+                    cm_call_volume_right_curve.setData(curve3_data, pen=magenta_pen)
+                    cm_put_volume_right_curve.setData(curve4_data, pen=aqua_pen)
+                else:
+                    cm_call_volume_right_curve.setData(curve3_data, pen=rpen)
+                    cm_put_volume_right_curve.setData(curve4_data, pen=bpen)               
 
             elif comboindex2 == 1:
 
@@ -11282,6 +11319,7 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
                     self.textBrowser.append(str)
 
                     if not START_ON:
+
                         self.AddCode()
                         str = '[{0:02d}:{1:02d}:{2:02d}] Auto Start...\r'.format(dt.hour, dt.minute, dt.second)
                         self.textBrowser.append(str)
@@ -13132,9 +13170,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
     def AddCode(self):
 
         global overnight, start_hour
-
+        global pre_start, service_time_start
         global START_ON
-        global pre_start
 
         global kp200_realdata, fut_realdata
 
@@ -13321,6 +13358,8 @@ class 화면_당월물옵션전광판(QDialog, Ui_당월물옵션전광판):
 
                 if int(current_str[0:2]) == 8 and int(current_str[3:5]) <= 59:
                     pre_start = True
+                elif 9 <= int(current_str[0:2]) <= 16:
+                    service_time_start = True
                 else:
                     pass
 
